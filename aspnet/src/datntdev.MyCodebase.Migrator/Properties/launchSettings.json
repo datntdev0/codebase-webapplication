@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "datntdev.MyCodebase.Migrator": {
+      "commandName": "Project",
+      "commandLineArgs": "-q"
+    }
+  }
+}
