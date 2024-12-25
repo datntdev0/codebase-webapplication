@@ -8,6 +8,7 @@ using Abp.Linq.Extensions;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
 using datntdev.MyCodebase.Authorization;
+using datntdev.MyCodebase.Authorization.Accounts.Dto;
 using datntdev.MyCodebase.Authorization.Roles;
 using datntdev.MyCodebase.Authorization.Users;
 using datntdev.MyCodebase.Editions;
@@ -20,7 +21,7 @@ using System.Threading.Tasks;
 namespace datntdev.MyCodebase.MultiTenancy;
 
 [AbpAuthorize(PermissionNames.Pages_Tenants)]
-public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, PagedTenantResultRequestDto, CreateTenantDto, TenantDto>, ITenantAppService
+public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, GetAllRequestDto, CreateRequestDto, TenantDto>, ITenantAppService
 {
     private readonly TenantManager _tenantManager;
     private readonly EditionManager _editionManager;
@@ -44,7 +45,24 @@ public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, Page
         _abpZeroDbMigrator = abpZeroDbMigrator;
     }
 
-    public override async Task<TenantDto> CreateAsync(CreateTenantDto input)
+    [AbpAllowAnonymous]
+    public async Task<IsAvailableResultDto> IsAvailableAsync(IsAvailableRequestDto input)
+    {
+        var tenant = await _tenantManager.FindByTenancyNameAsync(input.TenancyName);
+        if (tenant == null)
+        {
+            return new IsAvailableResultDto(TenantAvailabilityState.NotFound);
+        }
+
+        if (!tenant.IsActive)
+        {
+            return new IsAvailableResultDto(TenantAvailabilityState.InActive);
+        }
+
+        return new IsAvailableResultDto(TenantAvailabilityState.Available, tenant.Id);
+    }
+
+    public override async Task<TenantDto> CreateAsync(CreateRequestDto input)
     {
         CheckCreatePermission();
 
@@ -92,14 +110,14 @@ public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, Page
         return MapToEntityDto(tenant);
     }
 
-    protected override IQueryable<Tenant> CreateFilteredQuery(PagedTenantResultRequestDto input)
+    protected override IQueryable<Tenant> CreateFilteredQuery(GetAllRequestDto input)
     {
         return Repository.GetAll()
             .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Keyword) || x.Name.Contains(input.Keyword))
             .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
     }
 
-    protected override IQueryable<Tenant> ApplySorting(IQueryable<Tenant> query, PagedTenantResultRequestDto input)
+    protected override IQueryable<Tenant> ApplySorting(IQueryable<Tenant> query, GetAllRequestDto input)
     {
         return query.OrderBy(input.Sorting);
     }

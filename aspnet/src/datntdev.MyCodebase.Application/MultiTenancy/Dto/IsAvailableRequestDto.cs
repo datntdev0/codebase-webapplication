@@ -1,9 +1,9 @@
 ﻿using Abp.MultiTenancy;
 using System.ComponentModel.DataAnnotations;
 
-namespace datntdev.MyCodebase.Authorization.Accounts.Dto;
+namespace datntdev.MyCodebase.MultiTenancy.Dto;
 
-public class IsTenantAvailableInput
+public class IsAvailableRequestDto
 {
     [Required]
     [StringLength(AbpTenantBase.MaxTenancyNameLength)]

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace datntdev.MyCodebase.MultiTenancy.Dto;
 
 [AutoMapTo(typeof(Tenant))]
-public class CreateTenantDto
+public class CreateRequestDto
 {
     [Required]
     [StringLength(AbpTenantBase.MaxTenancyNameLength)]

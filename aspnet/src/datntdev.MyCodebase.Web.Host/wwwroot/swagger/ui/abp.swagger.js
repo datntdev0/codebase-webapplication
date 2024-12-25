@@ -91,7 +91,7 @@ var abp = abp || {};
                 }
             };
 
-            xhrTenancyName.open('POST', '/api/services/app/Account/IsTenantAvailable', true);
+            xhrTenancyName.open('POST', '/api/services/app/Tenant/IsAvailable', true);
             xhrTenancyName.setRequestHeader('Content-type', 'application/json');
             addAntiForgeryTokenToXhr(xhrTenancyName);
             xhrTenancyName.send(

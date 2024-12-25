@@ -3,7 +3,7 @@ using Abp.Runtime.Validation;
 
 namespace datntdev.MyCodebase.MultiTenancy.Dto;
 
-public class PagedTenantResultRequestDto : PagedResultRequestDto, IShouldNormalize
+public class GetAllRequestDto : PagedResultRequestDto, IShouldNormalize
 {
     public string Keyword { get; set; }
     public bool? IsActive { get; set; }
