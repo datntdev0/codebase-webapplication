@@ -1,12 +1,14 @@
-﻿using Abp.Authorization;
+﻿using Abp.Auditing;
+using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
 using datntdev.MyCodebase.Authentication.JwtBearer;
 using datntdev.MyCodebase.Authorization;
 using datntdev.MyCodebase.Authorization.Users;
-using datntdev.MyCodebase.Models.TokenAuth;
+using datntdev.MyCodebase.Models.Session;
 using datntdev.MyCodebase.MultiTenancy;
+using datntdev.MyCodebase.Sessions.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,14 +20,14 @@ using System.Threading.Tasks;
 namespace datntdev.MyCodebase.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class TokenAuthController : MyCodebaseControllerBase
+    public class SessionController : MyCodebaseControllerBase
     {
         private readonly LogInManager _logInManager;
         private readonly ITenantCache _tenantCache;
         private readonly AbpLoginResultTypeHelper _abpLoginResultTypeHelper;
         private readonly TokenAuthConfiguration _configuration;
 
-        public TokenAuthController(
+        public SessionController(
             LogInManager logInManager,
             ITenantCache tenantCache,
             AbpLoginResultTypeHelper abpLoginResultTypeHelper,
@@ -38,7 +40,7 @@ namespace datntdev.MyCodebase.Controllers
         }
 
         [HttpPost]
-        public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
+        public async Task<AuthenticateResultDto> AuthenticateAsync([FromBody] AuthenticateRequestDto model)
         {
             var loginResult = await GetLoginResultAsync(
                 model.UserNameOrEmailAddress,
@@ -48,13 +50,40 @@ namespace datntdev.MyCodebase.Controllers
 
             var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
 
-            return new AuthenticateResultModel
+            return new AuthenticateResultDto
             {
                 AccessToken = accessToken,
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
                 ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
                 UserId = loginResult.User.Id
             };
+        }
+
+        [HttpGet]
+        [DisableAuditing]
+        public async Task<SessionDto> GetCurrentAsync()
+        {
+            var output = new SessionDto
+            {
+                Application = new ApplicationInfoDto
+                {
+                    Version = AppVersionHelper.Version,
+                    ReleaseDate = AppVersionHelper.ReleaseDate,
+                    Features = new Dictionary<string, bool>()
+                }
+            };
+
+            if (AbpSession.TenantId.HasValue)
+            {
+                output.Tenant = ObjectMapper.Map<TenantLoginInfoDto>(await GetCurrentTenantAsync());
+            }
+
+            if (AbpSession.UserId.HasValue)
+            {
+                output.User = ObjectMapper.Map<UserLoginInfoDto>(await GetCurrentUserAsync());
+            }
+
+            return output;
         }
 
         private string GetTenancyNameOrNull()

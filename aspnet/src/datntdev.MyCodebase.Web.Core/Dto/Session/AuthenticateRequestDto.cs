@@ -2,9 +2,9 @@
 using Abp.Authorization.Users;
 using System.ComponentModel.DataAnnotations;
 
-namespace datntdev.MyCodebase.Models.TokenAuth
+namespace datntdev.MyCodebase.Models.Session
 {
-    public class AuthenticateModel
+    public class AuthenticateRequestDto
     {
         [Required]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]

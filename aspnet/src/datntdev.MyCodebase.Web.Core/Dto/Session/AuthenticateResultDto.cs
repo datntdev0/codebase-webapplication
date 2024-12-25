@@ -1,6 +1,6 @@
-﻿namespace datntdev.MyCodebase.Models.TokenAuth
+﻿namespace datntdev.MyCodebase.Models.Session
 {
-    public class AuthenticateResultModel
+    public class AuthenticateResultDto
     {
         public string AccessToken { get; set; }
 
