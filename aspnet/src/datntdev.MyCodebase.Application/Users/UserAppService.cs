@@ -9,9 +9,10 @@ using Abp.Linq.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
-using datntdev.MyCodebase.Authorization;
+using datntdev.MyCodebase.Authorization.Permissions;
 using datntdev.MyCodebase.Authorization.Roles;
 using datntdev.MyCodebase.Authorization.Users;
+using datntdev.MyCodebase.Identity;
 using datntdev.MyCodebase.Roles.Dto;
 using datntdev.MyCodebase.Users.Dto;
 using Microsoft.AspNetCore.Identity;
@@ -32,7 +33,7 @@ public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUser
     private readonly IRepository<Role> _roleRepository;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IAbpSession _abpSession;
-    private readonly LogInManager _logInManager;
+    private readonly LoginManager _logInManager;
 
     public UserAppService(
         IRepository<User, long> repository,
@@ -41,7 +42,7 @@ public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUser
         IRepository<Role> roleRepository,
         IPasswordHasher<User> passwordHasher,
         IAbpSession abpSession,
-        LogInManager logInManager)
+        LoginManager logInManager)
         : base(repository)
     {
         _userManager = userManager;
@@ -99,7 +100,6 @@ public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUser
         await _userManager.DeleteAsync(user);
     }
 
-    [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
     public async Task Activate(EntityDto<long> user)
     {
         await Repository.UpdateAsync(user.Id, async (entity) =>
@@ -108,7 +108,6 @@ public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUser
         });
     }
 
-    [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
     public async Task DeActivate(EntityDto<long> user)
     {
         await Repository.UpdateAsync(user.Id, async (entity) =>

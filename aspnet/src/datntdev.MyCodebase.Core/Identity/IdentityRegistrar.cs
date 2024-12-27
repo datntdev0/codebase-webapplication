@@ -1,4 +1,4 @@
-﻿using datntdev.MyCodebase.Authorization;
+﻿using datntdev.MyCodebase.Authorization.Permissions;
 using datntdev.MyCodebase.Authorization.Roles;
 using datntdev.MyCodebase.Authorization.Users;
 using datntdev.MyCodebase.Editions;
@@ -21,7 +21,7 @@ public static class IdentityRegistrar
             .AddAbpEditionManager<EditionManager>()
             .AddAbpUserStore<UserStore>()
             .AddAbpRoleStore<RoleStore>()
-            .AddAbpLogInManager<LogInManager>()
+            .AddAbpLogInManager<LoginManager>()
             .AddAbpSignInManager<SignInManager>()
             .AddAbpSecurityStampValidator<SecurityStampValidator>()
             .AddAbpUserClaimsPrincipalFactory<UserClaimsPrincipalFactory>()

@@ -5,15 +5,11 @@ using Abp.Domain.Uow;
 
 namespace datntdev.MyCodebase.Editions;
 
-public class EditionManager : AbpEditionManager
+public class EditionManager(
+    IRepository<Edition> editionRepository,
+    IAbpZeroFeatureValueStore featureValueStore,
+    IUnitOfWorkManager unitOfWorkManager
+) : AbpEditionManager(editionRepository, featureValueStore, unitOfWorkManager)
 {
     public const string DefaultEditionName = "Standard";
-
-    public EditionManager(
-        IRepository<Edition> editionRepository,
-        IAbpZeroFeatureValueStore featureValueStore,
-        IUnitOfWorkManager unitOfWorkManager)
-        : base(editionRepository, featureValueStore, unitOfWorkManager)
-    {
-    }
 }

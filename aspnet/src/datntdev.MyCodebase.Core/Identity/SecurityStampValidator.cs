@@ -9,14 +9,11 @@ using Microsoft.Extensions.Options;
 
 namespace datntdev.MyCodebase.Identity;
 
-public class SecurityStampValidator : AbpSecurityStampValidator<Tenant, Role, User>
-{
-    public SecurityStampValidator(
-        IOptions<SecurityStampValidatorOptions> options,
-        SignInManager signInManager,
-        ILoggerFactory loggerFactory,
-        IUnitOfWorkManager unitOfWorkManager)
-        : base(options, signInManager, loggerFactory, unitOfWorkManager)
-    {
-    }
-}
+public class SecurityStampValidator(
+    IOptions<SecurityStampValidatorOptions> options,
+    SignInManager signInManager,
+    ILoggerFactory loggerFactory,
+    IUnitOfWorkManager unitOfWorkManager
+) : AbpSecurityStampValidator<Tenant, Role, User>(
+    options, signInManager, loggerFactory, unitOfWorkManager)
+{ }

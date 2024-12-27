@@ -6,6 +6,7 @@ using Abp.Runtime.Security;
 using datntdev.MyCodebase.Authentication.JwtBearer;
 using datntdev.MyCodebase.Authorization;
 using datntdev.MyCodebase.Authorization.Users;
+using datntdev.MyCodebase.Identity;
 using datntdev.MyCodebase.Models.Session;
 using datntdev.MyCodebase.MultiTenancy;
 using datntdev.MyCodebase.Sessions.Dto;
@@ -22,13 +23,13 @@ namespace datntdev.MyCodebase.Controllers
     [Route("api/[controller]/[action]")]
     public class SessionController : MyCodebaseControllerBase
     {
-        private readonly LogInManager _logInManager;
+        private readonly LoginManager _logInManager;
         private readonly ITenantCache _tenantCache;
         private readonly AbpLoginResultTypeHelper _abpLoginResultTypeHelper;
         private readonly TokenAuthConfiguration _configuration;
 
         public SessionController(
-            LogInManager logInManager,
+            LoginManager logInManager,
             ITenantCache tenantCache,
             AbpLoginResultTypeHelper abpLoginResultTypeHelper,
             TokenAuthConfiguration configuration)
@@ -67,9 +68,9 @@ namespace datntdev.MyCodebase.Controllers
             {
                 Application = new ApplicationInfoDto
                 {
-                    Version = AppVersionHelper.Version,
-                    ReleaseDate = AppVersionHelper.ReleaseDate,
-                    Features = new Dictionary<string, bool>()
+                    Version = MyCodebaseConsts.Version,
+                    ReleaseDate = MyCodebaseConsts.ReleaseDate,
+                    Features = [],
                 }
             };
 

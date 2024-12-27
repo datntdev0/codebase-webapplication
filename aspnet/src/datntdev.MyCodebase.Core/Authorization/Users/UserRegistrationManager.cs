@@ -8,36 +8,25 @@ using datntdev.MyCodebase.MultiTenancy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace datntdev.MyCodebase.Authorization.Users;
 
-public class UserRegistrationManager : DomainService
+public class UserRegistrationManager(
+    TenantManager tenantManager,
+    UserManager userManager,
+    RoleManager roleManager) : DomainService
 {
-    public IAbpSession AbpSession { get; set; }
+    public IAbpSession AbpSession { get; set; } = NullAbpSession.Instance;
 
-    private readonly TenantManager _tenantManager;
-    private readonly UserManager _userManager;
-    private readonly RoleManager _roleManager;
-    private readonly IPasswordHasher<User> _passwordHasher;
-
-    public UserRegistrationManager(
-        TenantManager tenantManager,
-        UserManager userManager,
-        RoleManager roleManager,
-        IPasswordHasher<User> passwordHasher)
-    {
-        _tenantManager = tenantManager;
-        _userManager = userManager;
-        _roleManager = roleManager;
-        _passwordHasher = passwordHasher;
-
-        AbpSession = NullAbpSession.Instance;
-    }
-
-    public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed)
+    public async Task<User> RegisterAsync(
+        string name,
+        string surname,
+        string emailAddress,
+        string userName,
+        string plainPassword,
+        bool isEmailConfirmed)
     {
         CheckForTenant();
 
@@ -52,19 +41,19 @@ public class UserRegistrationManager : DomainService
             IsActive = true,
             UserName = userName,
             IsEmailConfirmed = isEmailConfirmed,
-            Roles = new List<UserRole>()
+            Roles = [],
         };
 
         user.SetNormalizedNames();
 
-        foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
+        foreach (var defaultRole in await roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
         {
             user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
         }
 
-        await _userManager.InitializeOptionsAsync(tenant.Id);
+        await userManager.InitializeOptionsAsync(tenant.Id);
 
-        CheckErrors(await _userManager.CreateAsync(user, plainPassword));
+        CheckErrors(await userManager.CreateAsync(user, plainPassword));
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return user;
@@ -90,11 +79,8 @@ public class UserRegistrationManager : DomainService
 
     private async Task<Tenant> GetActiveTenantAsync(int tenantId)
     {
-        var tenant = await _tenantManager.FindByIdAsync(tenantId);
-        if (tenant == null)
-        {
-            throw new UserFriendlyException(L("UnknownTenantId{0}", tenantId));
-        }
+        var tenant = await tenantManager.FindByIdAsync(tenantId)
+            ?? throw new UserFriendlyException(L("UnknownTenantId{0}", tenantId));
 
         if (!tenant.IsActive)
         {

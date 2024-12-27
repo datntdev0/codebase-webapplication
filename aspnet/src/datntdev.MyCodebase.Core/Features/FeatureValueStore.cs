@@ -8,22 +8,18 @@ using datntdev.MyCodebase.MultiTenancy;
 
 namespace datntdev.MyCodebase.Features;
 
-public class FeatureValueStore : AbpFeatureValueStore<Tenant, User>
-{
-    public FeatureValueStore(
-        ICacheManager cacheManager,
-        IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
-        IRepository<Tenant> tenantRepository,
-        IRepository<EditionFeatureSetting, long> editionFeatureRepository,
-        IFeatureManager featureManager,
-        IUnitOfWorkManager unitOfWorkManager)
-        : base(
-              cacheManager,
-              tenantFeatureRepository,
-              tenantRepository,
-              editionFeatureRepository,
-              featureManager,
-              unitOfWorkManager)
-    {
-    }
-}
+public class FeatureValueStore(
+    ICacheManager cacheManager,
+    IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
+    IRepository<Tenant> tenantRepository,
+    IRepository<EditionFeatureSetting, long> editionFeatureRepository,
+    IFeatureManager featureManager,
+    IUnitOfWorkManager unitOfWorkManager
+) : AbpFeatureValueStore<Tenant, User>(
+    cacheManager,
+    tenantFeatureRepository,
+    tenantRepository,
+    editionFeatureRepository,
+    featureManager,
+    unitOfWorkManager)
+{ }

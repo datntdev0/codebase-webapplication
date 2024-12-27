@@ -7,7 +7,7 @@ namespace datntdev.MyCodebase.Localization;
 
 public static class MyCodebaseLocalizationConfigurer
 {
-    public static void Configure(ILocalizationConfiguration localizationConfiguration)
+    public static void Configure(this ILocalizationConfiguration localizationConfiguration)
     {
         localizationConfiguration.Sources.Add(
             new DictionaryBasedLocalizationSource(MyCodebaseConsts.LocalizationSourceName,

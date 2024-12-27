@@ -6,18 +6,14 @@ using Microsoft.Extensions.Options;
 
 namespace datntdev.MyCodebase.Authorization.Users;
 
-public class UserClaimsPrincipalFactory : AbpUserClaimsPrincipalFactory<User, Role>
-{
-    public UserClaimsPrincipalFactory(
-        UserManager userManager,
-        RoleManager roleManager,
-        IOptions<IdentityOptions> optionsAccessor,
-        IUnitOfWorkManager unitOfWorkManager)
-        : base(
-              userManager,
-              roleManager,
-              optionsAccessor,
-              unitOfWorkManager)
-    {
-    }
-}
+public class UserClaimsPrincipalFactory(
+    UserManager userManager,
+    RoleManager roleManager,
+    IOptions<IdentityOptions> optionsAccessor,
+    IUnitOfWorkManager unitOfWorkManager
+) : AbpUserClaimsPrincipalFactory<User, Role>(
+    userManager,
+    roleManager,
+    optionsAccessor,
+    unitOfWorkManager)
+{ }

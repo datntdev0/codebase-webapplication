@@ -9,7 +9,7 @@ public class Tenant : AbpTenant<User>
     {
     }
 
-    public Tenant(string tenancyName, string name)
+    public Tenant(string tenancyName, string name) 
         : base(tenancyName, name)
     {
     }

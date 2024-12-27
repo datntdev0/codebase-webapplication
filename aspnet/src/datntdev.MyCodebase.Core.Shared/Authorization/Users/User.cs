@@ -1,7 +1,6 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Extensions;
 using System;
-using System.Collections.Generic;
 
 namespace datntdev.MyCodebase.Authorization.Users;
 
@@ -23,7 +22,7 @@ public class User : AbpUser<User>
             Name = AdminUserName,
             Surname = AdminUserName,
             EmailAddress = emailAddress,
-            Roles = new List<UserRole>()
+            Roles = [],
         };
 
         user.SetNormalizedNames();

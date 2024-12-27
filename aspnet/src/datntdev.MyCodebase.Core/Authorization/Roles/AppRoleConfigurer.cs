@@ -3,9 +3,9 @@ using Abp.Zero.Configuration;
 
 namespace datntdev.MyCodebase.Authorization.Roles;
 
-public static class AppRoleConfig
+public static class AppRoleConfigurer
 {
-    public static void Configure(IRoleManagementConfig roleManagementConfig)
+    public static void Configure(this IRoleManagementConfig roleManagementConfig)
     {
         // Static host roles
 

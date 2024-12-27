@@ -1,26 +1,24 @@
-﻿using Abp.Reflection.Extensions;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 
-namespace datntdev.MyCodebase.Web;
+namespace datntdev.MyCodebase.Helpers;
 
 /// <summary>
-/// This class is used to find root path of the web project in;
+/// This class is used to find root path of the web project in
 /// unit tests (to find views) and entity framework core command line commands (to find conn string).
 /// </summary>
 public static class WebContentDirectoryFinder
 {
     public static string CalculateContentRootFolder()
     {
-        var coreAssemblyDirectoryPath = Path.GetDirectoryName(typeof(MyCodebaseCoreModule).GetAssembly().Location);
-        if (coreAssemblyDirectoryPath == null)
-        {
-            throw new Exception("Could not find location of datntdev.MyCodebase.Core assembly!");
-        }
+        var currentAssembly = typeof(WebContentDirectoryFinder).Assembly;
 
-        var directoryInfo = new DirectoryInfo(coreAssemblyDirectoryPath);
-        while (!DirectoryContains(directoryInfo.FullName, "datntdev.MyCodebase.sln"))
+        var assemblyDirectoryPath = Path.GetDirectoryName(currentAssembly.Location)
+            ?? throw new Exception($"Could not find location of {currentAssembly.FullName} assembly!");
+
+        var directoryInfo = new DirectoryInfo(assemblyDirectoryPath);
+        while (!DirectoryContainsSolution(directoryInfo.FullName))
         {
             if (directoryInfo.Parent == null)
             {
@@ -45,8 +43,13 @@ public static class WebContentDirectoryFinder
         throw new Exception("Could not find root folder of the web project!");
     }
 
-    private static bool DirectoryContains(string directory, string fileName)
+    private static bool DirectoryContainsSolution(string directory, string fileName = null)
     {
-        return Directory.GetFiles(directory).Any(filePath => string.Equals(Path.GetFileName(filePath), fileName));
+        return Directory.GetFiles(directory).Any(filePath =>
+        {
+            var actualFileName = Path.GetFileName(filePath);
+            if (fileName == null) return actualFileName.Contains(".sln");
+            else return string.Equals(actualFileName, fileName);
+        });
     }
 }
