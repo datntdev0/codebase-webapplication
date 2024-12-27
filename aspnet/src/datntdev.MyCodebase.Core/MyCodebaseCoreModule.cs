@@ -1,5 +1,4 @@
 ﻿using Abp.Modules;
-using Abp.Reflection.Extensions;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using datntdev.MyCodebase.Authorization.Roles;
@@ -28,6 +27,8 @@ public class MyCodebaseCoreModule : AbpModule
 
     public override void Initialize()
     {
-        IocManager.RegisterAssemblyByConvention(typeof(MyCodebaseCoreModule).GetAssembly());
+        IocManager.RegisterAssemblyByConvention(
+            typeof(MyCodebaseCoreModule).Assembly
+        );
     }
 }

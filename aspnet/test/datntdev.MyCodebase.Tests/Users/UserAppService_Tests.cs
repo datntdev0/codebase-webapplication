@@ -1,5 +1,5 @@
-﻿using datntdev.MyCodebase.Users;
-using datntdev.MyCodebase.Users.Dto;
+﻿using datntdev.MyCodebase.Authorization.Users;
+using datntdev.MyCodebase.Authorization.Users.Dto;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ public class UserAppService_Tests : MyCodebaseTestBase
     public async Task GetUsers_Test()
     {
         // Act
-        var output = await _userAppService.GetAllAsync(new PagedUserResultRequestDto { MaxResultCount = 20, SkipCount = 0 });
+        var output = await _userAppService.GetAllAsync(new GetAllRequestDto { MaxResultCount = 20, SkipCount = 0 });
 
         // Assert
         output.Items.Count.ShouldBeGreaterThan(0);
@@ -31,7 +31,7 @@ public class UserAppService_Tests : MyCodebaseTestBase
     {
         // Act
         await _userAppService.CreateAsync(
-            new CreateUserDto
+            new CreateRequestDto
             {
                 EmailAddress = "john@volosoft.com",
                 IsActive = true,

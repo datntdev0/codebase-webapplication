@@ -3,8 +3,8 @@ using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
+using Abp.UI;
 using datntdev.MyCodebase.Authentication.JwtBearer;
-using datntdev.MyCodebase.Authorization;
 using datntdev.MyCodebase.Authorization.Users;
 using datntdev.MyCodebase.Identity;
 using datntdev.MyCodebase.Models.Session;
@@ -25,18 +25,15 @@ namespace datntdev.MyCodebase.Controllers
     {
         private readonly LoginManager _logInManager;
         private readonly ITenantCache _tenantCache;
-        private readonly AbpLoginResultTypeHelper _abpLoginResultTypeHelper;
         private readonly TokenAuthConfiguration _configuration;
 
         public SessionController(
             LoginManager logInManager,
             ITenantCache tenantCache,
-            AbpLoginResultTypeHelper abpLoginResultTypeHelper,
             TokenAuthConfiguration configuration)
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
-            _abpLoginResultTypeHelper = abpLoginResultTypeHelper;
             _configuration = configuration;
         }
 
@@ -106,7 +103,7 @@ namespace datntdev.MyCodebase.Controllers
                 case AbpLoginResultType.Success:
                     return loginResult;
                 default:
-                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
+                    throw CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
             }
         }
 
@@ -145,6 +142,54 @@ namespace datntdev.MyCodebase.Controllers
         private string GetEncryptedAccessToken(string accessToken)
         {
             return SimpleStringCipher.Instance.Encrypt(accessToken);
+        }
+
+        private Exception CreateExceptionForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName)
+        {
+            switch (result)
+            {
+                case AbpLoginResultType.Success:
+                    return new Exception("Don't call this method with a success result!");
+                case AbpLoginResultType.InvalidUserNameOrEmailAddress:
+                case AbpLoginResultType.InvalidPassword:
+                    return new UserFriendlyException(L("LoginFailed"), L("InvalidUserNameOrPassword"));
+                case AbpLoginResultType.InvalidTenancyName:
+                    return new UserFriendlyException(L("LoginFailed"), L("ThereIsNoTenantDefinedWithName{0}", tenancyName));
+                case AbpLoginResultType.TenantIsNotActive:
+                    return new UserFriendlyException(L("LoginFailed"), L("TenantIsNotActive", tenancyName));
+                case AbpLoginResultType.UserIsNotActive:
+                    return new UserFriendlyException(L("LoginFailed"), L("UserIsNotActiveAndCanNotLogin", usernameOrEmailAddress));
+                case AbpLoginResultType.UserEmailIsNotConfirmed:
+                    return new UserFriendlyException(L("LoginFailed"), L("UserEmailIsNotConfirmedAndCanNotLogin"));
+                case AbpLoginResultType.LockedOut:
+                    return new UserFriendlyException(L("LoginFailed"), L("UserLockedOutMessage"));
+                default: // Can not fall to default actually. But other result types can be added in the future and we may forget to handle it
+                    Logger.Warn("Unhandled login fail reason: " + result);
+                    return new UserFriendlyException(L("LoginFailed"));
+            }
+        }
+
+        private string CreateLocalizedMessageForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName)
+        {
+            switch (result)
+            {
+                case AbpLoginResultType.Success:
+                    throw new Exception("Don't call this method with a success result!");
+                case AbpLoginResultType.InvalidUserNameOrEmailAddress:
+                case AbpLoginResultType.InvalidPassword:
+                    return L("InvalidUserNameOrPassword");
+                case AbpLoginResultType.InvalidTenancyName:
+                    return L("ThereIsNoTenantDefinedWithName{0}", tenancyName);
+                case AbpLoginResultType.TenantIsNotActive:
+                    return L("TenantIsNotActive", tenancyName);
+                case AbpLoginResultType.UserIsNotActive:
+                    return L("UserIsNotActiveAndCanNotLogin", usernameOrEmailAddress);
+                case AbpLoginResultType.UserEmailIsNotConfirmed:
+                    return L("UserEmailIsNotConfirmedAndCanNotLogin");
+                default: // Can not fall to default actually. But other result types can be added in the future and we may forget to handle it
+                    Logger.Warn("Unhandled login fail reason: " + result);
+                    return L("LoginFailed");
+            }
         }
     }
 }

@@ -12,6 +12,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\datntdev.MyCodebase.Application.Contracts\datntdev.MyCodebase.Application.Contracts.csproj" />
     <ProjectReference Include="..\datntdev.MyCodebase.Core\datntdev.MyCodebase.Core.csproj" />
   </ItemGroup>
 </Project>

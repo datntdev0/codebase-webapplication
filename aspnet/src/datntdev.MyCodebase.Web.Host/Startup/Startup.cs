@@ -136,6 +136,7 @@ namespace datntdev.MyCodebase.Web.Host.Startup
                         Url = new Uri("https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/LICENSE.md"),
                     }
                 });
+                options.CustomSchemaIds(type => type.FullName);
                 options.DocInclusionPredicate((docName, description) => true);
 
                 // Define the BearerAuth scheme that's in use

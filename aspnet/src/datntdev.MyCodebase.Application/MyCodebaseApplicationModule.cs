@@ -1,13 +1,11 @@
-﻿using Abp.AutoMapper;
-using Abp.Modules;
-using Abp.Reflection.Extensions;
+﻿using Abp.Modules;
 using datntdev.MyCodebase.Authorization;
 
 namespace datntdev.MyCodebase;
 
-[DependsOn(
-    typeof(MyCodebaseCoreModule),
-    typeof(AbpAutoMapperModule))]
+[DependsOn(typeof(MyCodebaseCoreModule)
+    , typeof(MyCodebaseApplicationContractsModule)
+)]
 public class MyCodebaseApplicationModule : AbpModule
 {
     public override void PreInitialize()
@@ -17,13 +15,8 @@ public class MyCodebaseApplicationModule : AbpModule
 
     public override void Initialize()
     {
-        var thisAssembly = typeof(MyCodebaseApplicationModule).GetAssembly();
-
-        IocManager.RegisterAssemblyByConvention(thisAssembly);
-
-        Configuration.Modules.AbpAutoMapper().Configurators.Add(
-            // Scan the assembly for classes which inherit from AutoMapper.Profile
-            cfg => cfg.AddMaps(thisAssembly)
+        IocManager.RegisterAssemblyByConvention(
+            typeof(MyCodebaseApplicationModule).Assembly
         );
     }
 }
