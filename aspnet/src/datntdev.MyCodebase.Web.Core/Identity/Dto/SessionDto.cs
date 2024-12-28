@@ -4,7 +4,8 @@ using Abp.Application.Services.Dto;
 using datntdev.MyCodebase.MultiTenancy;
 using Abp.AutoMapper;
 using datntdev.MyCodebase.Authorization.Users;
-namespace datntdev.MyCodebase.Sessions.Dto;
+
+namespace datntdev.MyCodebase.Identity.Dto;
 
 public class SessionDto
 {

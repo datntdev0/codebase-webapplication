@@ -1,4 +1,4 @@
-﻿namespace datntdev.MyCodebase.Identity.Accounts.Dto;
+﻿namespace datntdev.MyCodebase.Identity.Dto;
 
 public class RegisterResultDto
 {

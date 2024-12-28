@@ -5,7 +5,7 @@ using datntdev.MyCodebase.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace datntdev.MyCodebase.Identity.Accounts.Dto;
+namespace datntdev.MyCodebase.Identity.Dto;
 
 public class RegisterRequestDto : IValidatableObject
 {

@@ -1,15 +1,16 @@
 ﻿using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Authorization.Users;
+using Abp.Configuration;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
 using Abp.UI;
+using Abp.Zero.Configuration;
 using datntdev.MyCodebase.Authentication.JwtBearer;
 using datntdev.MyCodebase.Authorization.Users;
 using datntdev.MyCodebase.Identity;
-using datntdev.MyCodebase.Models.Session;
+using datntdev.MyCodebase.Identity.Dto;
 using datntdev.MyCodebase.MultiTenancy;
-using datntdev.MyCodebase.Sessions.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,24 +22,15 @@ using System.Threading.Tasks;
 namespace datntdev.MyCodebase.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class SessionController : MyCodebaseControllerBase
+    public class IdentityController(
+        LoginManager logInManager,
+        UserRegistrationManager userRegistrationManager,
+        ITenantCache tenantCache,
+        TokenAuthConfiguration configuration
+    ) : MyCodebaseControllerBase
     {
-        private readonly LoginManager _logInManager;
-        private readonly ITenantCache _tenantCache;
-        private readonly TokenAuthConfiguration _configuration;
-
-        public SessionController(
-            LoginManager logInManager,
-            ITenantCache tenantCache,
-            TokenAuthConfiguration configuration)
-        {
-            _logInManager = logInManager;
-            _tenantCache = tenantCache;
-            _configuration = configuration;
-        }
-
         [HttpPost]
-        public async Task<AuthenticateResultDto> AuthenticateAsync([FromBody] AuthenticateRequestDto model)
+        public async Task<LoginResultDto> LoginAsync([FromBody] LoginRequestDto model)
         {
             var loginResult = await GetLoginResultAsync(
                 model.UserNameOrEmailAddress,
@@ -48,18 +40,40 @@ namespace datntdev.MyCodebase.Controllers
 
             var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
 
-            return new AuthenticateResultDto
+            return new LoginResultDto
             {
                 AccessToken = accessToken,
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
+                ExpireInSeconds = (int)configuration.Expiration.TotalSeconds,
                 UserId = loginResult.User.Id
+            };
+        }
+
+
+        [HttpPost]
+        public async Task<RegisterResultDto> Register(RegisterRequestDto input)
+        {
+            var user = await userRegistrationManager.RegisterAsync(
+                input.Name,
+                input.Surname,
+                input.EmailAddress,
+                input.UserName,
+                input.Password,
+                true // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
+            );
+
+            var isEmailConfirmationRequiredForLogin = await SettingManager
+                .GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
+
+            return new RegisterResultDto
+            {
+                CanLogin = user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin)
             };
         }
 
         [HttpGet]
         [DisableAuditing]
-        public async Task<SessionDto> GetCurrentAsync()
+        public async Task<SessionDto> GetSessionAsync()
         {
             var output = new SessionDto
             {
@@ -91,12 +105,12 @@ namespace datntdev.MyCodebase.Controllers
                 return null;
             }
 
-            return _tenantCache.GetOrNull(AbpSession.TenantId.Value)?.TenancyName;
+            return tenantCache.GetOrNull(AbpSession.TenantId.Value)?.TenancyName;
         }
 
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
         {
-            var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
+            var loginResult = await logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
 
             switch (loginResult.Result)
             {
@@ -112,12 +126,12 @@ namespace datntdev.MyCodebase.Controllers
             var now = DateTime.UtcNow;
 
             var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _configuration.Issuer,
-                audience: _configuration.Audience,
+                issuer: configuration.Issuer,
+                audience: configuration.Audience,
                 claims: claims,
                 notBefore: now,
-                expires: now.Add(expiration ?? _configuration.Expiration),
-                signingCredentials: _configuration.SigningCredentials
+                expires: now.Add(expiration ?? configuration.Expiration),
+                signingCredentials: configuration.SigningCredentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
