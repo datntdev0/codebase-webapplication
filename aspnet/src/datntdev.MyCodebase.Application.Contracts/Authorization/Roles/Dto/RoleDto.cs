@@ -1,5 +1,6 @@
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Roles;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,4 +24,8 @@ public class RoleDto : EntityDto<int>
     public List<string> GrantedPermissions { get; set; }
 
     public bool IsStatic { get; set; }
+
+    public bool IsDefault { get; set; }
+
+    public DateTime CreationTime { get; set; }
 }

@@ -2,9 +2,9 @@
 
 namespace datntdev.MyCodebase.Authorization.Users.Dto;
 
-public class UserMapProfile : Profile
+public class MapperProfile : Profile
 {
-    public UserMapProfile()
+    public MapperProfile()
     {
         CreateMap<UserDto, User>();
         CreateMap<UserDto, User>()

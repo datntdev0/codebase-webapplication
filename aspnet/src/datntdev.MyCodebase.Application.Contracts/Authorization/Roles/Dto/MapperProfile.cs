@@ -5,22 +5,20 @@ using System.Linq;
 
 namespace datntdev.MyCodebase.Authorization.Roles.Dto;
 
-public class RoleMapProfile : Profile
+public class MapperProfile : Profile
 {
-    public RoleMapProfile()
+    public MapperProfile()
     {
-        // Role and permission
         CreateMap<Permission, string>().ConvertUsing(r => r.Name);
+
         CreateMap<RolePermissionSetting, string>().ConvertUsing(r => r.Name);
 
         CreateMap<CreateRequestDto, Role>();
 
         CreateMap<RoleDto, Role>();
 
-        CreateMap<Role, RoleDto>().ForMember(x => x.GrantedPermissions,
-            opt => opt.MapFrom(x => x.Permissions.Where(p => p.IsGranted)));
-
-        CreateMap<Role, RoleListDto>();
-        CreateMap<Permission, FlatPermissionDto>();
+        CreateMap<Role, RoleDto>()
+            .ForMember(x => x.GrantedPermissions,
+                opt => opt.MapFrom(x => x.Permissions.Where(p => p.IsGranted)));
     }
 }
