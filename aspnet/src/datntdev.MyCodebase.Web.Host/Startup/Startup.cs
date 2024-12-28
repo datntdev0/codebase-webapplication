@@ -17,6 +17,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Abp.AspNetCore.Mvc.Conventions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Extensions.Primitives;
+using System.Collections.Generic;
 
 namespace datntdev.MyCodebase.Web.Host.Startup
 {
@@ -76,6 +82,13 @@ namespace datntdev.MyCodebase.Web.Host.Startup
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 )
             );
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Conventions.Insert(1, new MyCodebaseServiceConvention(services));
+                //options.Conventions.RemoveType<AbpAppServiceConvention>();
+                //options.Conventions.Add(new MyCodebaseServiceConvention(services));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

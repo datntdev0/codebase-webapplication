@@ -1,5 +1,4 @@
-﻿using Abp.Application.Services;
-using Abp.Application.Services.Dto;
+﻿using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
@@ -33,7 +32,7 @@ public class UsersAppService(
     IPasswordHasher<User> passwordHasher,
     IAbpSession abpSession,
     LoginManager logInManager
-) : AsyncCrudAppService<User, UserDto, long, GetAllRequestDto, Dto.CreateRequestDto, UserDto>(repository), IUsersAppService
+) : MyCodebaseCrudAppServicee<User, UserDto, long, GetAllRequestDto, Dto.CreateRequestDto, UserDto>(repository), IUsersAppService
 {
     public override async Task<UserDto> CreateAsync(Dto.CreateRequestDto input)
     {
@@ -73,16 +72,16 @@ public class UsersAppService(
             CheckErrors(await userManager.SetRolesAsync(user, input.RoleNames));
         }
 
-        return await GetAsync(input);
+        return await GetAsync(input.Id);
     }
 
-    public override async Task DeleteAsync(EntityDto<long> input)
+    public override async Task DeleteAsync(long id)
     {
-        var user = await userManager.GetUserByIdAsync(input.Id);
+        var user = await userManager.GetUserByIdAsync(id);
         await userManager.DeleteAsync(user);
     }
 
-    public async Task Activate(EntityDto<long> user)
+    public async Task ActivateAsync(EntityDto<long> user)
     {
         await Repository.UpdateAsync(user.Id, async (entity) =>
         {
@@ -90,7 +89,7 @@ public class UsersAppService(
         });
     }
 
-    public async Task DeActivate(EntityDto<long> user)
+    public async Task DeactivateAsync(EntityDto<long> user)
     {
         await Repository.UpdateAsync(user.Id, async (entity) =>
         {
@@ -98,13 +97,13 @@ public class UsersAppService(
         });
     }
 
-    public async Task<ListResultDto<RoleDto>> GetRoles()
+    public async Task<ListResultDto<RoleDto>> GetRolesAsync()
     {
         var roles = await roleRepository.GetAllListAsync();
         return new ListResultDto<RoleDto>(ObjectMapper.Map<List<RoleDto>>(roles));
     }
 
-    public async Task ChangeLanguage(ChangeUserLanguageDto input)
+    public async Task PatchLanguageAsync(ChangeUserLanguageDto input)
     {
         await SettingManager.ChangeSettingForUserAsync(
             AbpSession.ToUserIdentifier(),
@@ -167,15 +166,12 @@ public class UsersAppService(
         identityResult.CheckErrors(LocalizationManager);
     }
 
-    public async Task<bool> ChangePassword(ChangePasswordDto input)
+    public async Task PatchPasswordAsync(ChangePasswordDto input)
     {
         await userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
-        var user = await userManager.FindByIdAsync(AbpSession.GetUserId().ToString());
-        if (user == null)
-        {
-            throw new Exception("There is no current user!");
-        }
+        var user = await userManager.FindByIdAsync(AbpSession.GetUserId().ToString())
+            ?? throw new Exception("There is no current user!");
 
         if (await userManager.CheckPasswordAsync(user, input.CurrentPassword))
         {
@@ -188,11 +184,9 @@ public class UsersAppService(
                 Description = "Incorrect password."
             }));
         }
-
-        return true;
     }
 
-    public async Task<bool> ResetPassword(ResetPasswordDto input)
+    public async Task ResetPasswordAsync(ResetPasswordDto input)
     {
         if (abpSession.UserId == null)
         {
@@ -206,25 +200,17 @@ public class UsersAppService(
             throw new UserFriendlyException("Your 'Admin Password' did not match the one on record.  Please try again.");
         }
 
-        if (currentUser.IsDeleted || !currentUser.IsActive)
-        {
-            return false;
-        }
-
         var roles = await userManager.GetRolesAsync(currentUser);
         if (!roles.Contains(StaticRoleNames.Tenants.Admin))
         {
             throw new UserFriendlyException("Only administrators may reset passwords.");
         }
 
-        var user = await userManager.GetUserByIdAsync(input.UserId);
-        if (user != null)
-        {
-            user.Password = passwordHasher.HashPassword(user, input.NewPassword);
-            await CurrentUnitOfWork.SaveChangesAsync();
-        }
+        var user = await userManager.GetUserByIdAsync(input.UserId)
+            ?? throw new UserFriendlyException("User not found.");
 
-        return true;
+        user.Password = passwordHasher.HashPassword(user, input.NewPassword);
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 }
 

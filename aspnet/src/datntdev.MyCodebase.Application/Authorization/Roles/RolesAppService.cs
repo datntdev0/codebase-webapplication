@@ -1,5 +1,4 @@
-﻿using Abp.Application.Services;
-using Abp.Application.Services.Dto;
+﻿using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
@@ -22,7 +21,7 @@ public class RolesAppService(
     IRepository<Role> repository,
     RoleManager roleManager,
     UserManager userManager
-) : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>(repository), IRolesAppService
+) : MyCodebaseCrudAppServicee<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>(repository), IRolesAppService
 {
     public override async Task<RoleDto> CreateAsync(CreateRequestDto input)
     {
@@ -76,11 +75,11 @@ public class RolesAppService(
         return MapToEntityDto(role);
     }
 
-    public override async Task DeleteAsync(EntityDto<int> input)
+    public override async Task DeleteAsync(int id)
     {
         CheckDeletePermission();
 
-        var role = await roleManager.FindByIdAsync(input.Id.ToString());
+        var role = await roleManager.FindByIdAsync(id.ToString());
         var users = await userManager.GetUsersInRoleAsync(role.NormalizedName);
 
         foreach (var user in users)

@@ -1,6 +1,4 @@
-﻿using Abp.Application.Services;
-using Abp.Application.Services.Dto;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.IdentityFramework;
@@ -27,7 +25,7 @@ public class TenantsAppService(
     UserManager userManager,
     RoleManager roleManager,
     IAbpZeroDbMigrator abpZeroDbMigrator
-) : AsyncCrudAppService<Tenant, TenantDto, int, GetAllRequestDto, CreateRequestDto, TenantDto>(repository), ITenantsAppService
+) : MyCodebaseCrudAppServicee<Tenant, TenantDto, int, GetAllRequestDto, CreateRequestDto, TenantDto>(repository), ITenantsAppService
 {
     public override async Task<TenantDto> CreateAsync(CreateRequestDto input)
     {
@@ -97,11 +95,11 @@ public class TenantsAppService(
         entity.IsActive = updateInput.IsActive;
     }
 
-    public override async Task DeleteAsync(EntityDto<int> input)
+    public override async Task DeleteAsync(int id)
     {
         CheckDeletePermission();
 
-        var tenant = await tenantManager.GetByIdAsync(input.Id);
+        var tenant = await tenantManager.GetByIdAsync(id);
         await tenantManager.DeleteAsync(tenant);
     }
 
