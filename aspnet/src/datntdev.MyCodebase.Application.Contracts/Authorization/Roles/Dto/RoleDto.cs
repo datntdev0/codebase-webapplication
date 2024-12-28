@@ -21,7 +21,7 @@ public class RoleDto : EntityDto<int>
     [StringLength(Role.MaxDescriptionLength)]
     public string Description { get; set; }
 
-    public List<string> GrantedPermissions { get; set; }
+    public List<string> GrantedPermissions { get; set; } = [];
 
     public bool IsStatic { get; set; }
 

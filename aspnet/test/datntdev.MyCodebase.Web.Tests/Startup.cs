@@ -1,12 +1,9 @@
 ﻿using Abp.AspNetCore;
 using Abp.AspNetCore.TestBase;
 using Abp.Dependency;
-using datntdev.MyCodebase.Authentication.JwtBearer;
 using datntdev.MyCodebase.Configuration;
 using datntdev.MyCodebase.EntityFrameworkCore;
 using datntdev.MyCodebase.Identity;
-using datntdev.MyCodebase.Web.Resources;
-using datntdev.MyCodebase.Web.Startup;
 using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using datntdev.MyCodebase.Web.Host.Startup;
 
 namespace datntdev.MyCodebase.Web.Tests;
 
@@ -31,18 +29,16 @@ public class Startup
     {
         services.AddEntityFrameworkInMemoryDatabase();
 
-        services.AddMvc();
+        services.AddMvc(options =>
+        {
+            options.Conventions.Add(new MyCodebaseServiceConvention(services));
+        });
 
         IdentityRegistrar.Register(services);
         AuthConfigurer.Configure(services, _appConfiguration);
-
-        services.AddScoped<IWebResourceManager, WebResourceManager>();
-
-        //Configure Abp and Dependency Injection
-        return services.AddAbp<MyCodebaseWebTestModule>(options =>
-        {
-            options.SetupTest();
-        });
+        
+        // Configure Abp and Dependency Injection
+        return services.AddAbp<MyCodebaseWebTestModule>(options => options.SetupTest());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -54,12 +50,10 @@ public class Startup
         app.UseExceptionHandler("/Error");
 
         app.UseStaticFiles();
+
         app.UseRouting();
 
         app.UseAuthentication();
-
-        app.UseJwtTokenMiddleware();
-
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>

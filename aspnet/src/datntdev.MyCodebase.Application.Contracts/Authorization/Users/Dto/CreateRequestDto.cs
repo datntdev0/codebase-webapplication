@@ -1,13 +1,12 @@
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
-using Abp.Runtime.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace datntdev.MyCodebase.Authorization.Users.Dto;
 
 [AutoMapTo(typeof(User))]
-public class CreateRequestDto : IShouldNormalize
+public class CreateRequestDto
 {
     [Required]
     [StringLength(AbpUserBase.MaxUserNameLength)]
@@ -28,18 +27,10 @@ public class CreateRequestDto : IShouldNormalize
 
     public bool IsActive { get; set; }
 
-    public string[] RoleNames { get; set; }
+    public string[] RoleNames { get; set; } = [];
 
     [Required]
     [StringLength(AbpUserBase.MaxPlainPasswordLength)]
     [DisableAuditing]
     public string Password { get; set; }
-
-    public void Normalize()
-    {
-        if (RoleNames == null)
-        {
-            RoleNames = new string[0];
-        }
-    }
 }

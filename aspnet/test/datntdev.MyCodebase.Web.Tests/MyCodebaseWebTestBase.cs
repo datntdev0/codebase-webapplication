@@ -5,8 +5,6 @@ using Abp.Json;
 using Abp.MultiTenancy;
 using Abp.Web.Models;
 using datntdev.MyCodebase.EntityFrameworkCore;
-using datntdev.MyCodebase.Models.TokenAuth;
-using datntdev.MyCodebase.Web.Startup;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Hosting;
@@ -19,11 +17,20 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using datntdev.MyCodebase.Helpers;
+using datntdev.MyCodebase.Web.Host.Startup;
+using datntdev.MyCodebase.Identity.Dto;
+using System.Net.Http.Json;
 
 namespace datntdev.MyCodebase.Web.Tests;
 
 public abstract class MyCodebaseWebTestBase : AbpAspNetCoreIntegratedTestBase<Startup>
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     protected static readonly Lazy<string> ContentRootFolder;
 
     static MyCodebaseWebTestBase()
@@ -36,32 +43,55 @@ public abstract class MyCodebaseWebTestBase : AbpAspNetCoreIntegratedTestBase<St
         return base
             .CreateWebHostBuilder()
             .UseContentRoot(ContentRootFolder.Value)
-            .UseSetting(WebHostDefaults.ApplicationKey, typeof(MyCodebaseWebMvcModule).Assembly.FullName);
+            .UseSetting(WebHostDefaults.ApplicationKey, typeof(MyCodebaseWebHostModule).Assembly.FullName);
     }
 
     #region Get response
 
-    protected async Task<T> GetResponseAsObjectAsync<T>(string url,
-        HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
-    {
-        var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
-        return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
-    }
-
-    protected async Task<string> GetResponseAsStringAsync(string url,
-        HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
-    {
-        var response = await GetResponseAsync(url, expectedStatusCode);
-        return await response.Content.ReadAsStringAsync();
-    }
-
-    protected async Task<HttpResponseMessage> GetResponseAsync(string url,
-        HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    protected async Task<T> GetAsync<T>(
+        string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
     {
         var response = await Client.GetAsync(url);
+        response.StatusCode.ShouldBe(expectedStatusCode);
+        var strResponse = await response.Content.ReadAsStringAsync();
+        var ajaxResponse = JsonSerializer.Deserialize<AjaxResponse<T>>(strResponse, JsonSerializerOptions);
+        return ajaxResponse.Result;
+    }
+
+    protected async Task<T> PostAsync<T>(
+        string url, object content, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    {
+        var response = await Client.PostAsJsonAsync(url, content);
+        response.StatusCode.ShouldBe(expectedStatusCode);
+        var strResponse = await response.Content.ReadAsStringAsync();
+        var ajaxResponse = JsonSerializer.Deserialize<AjaxResponse<T>>(strResponse, JsonSerializerOptions);
+        return ajaxResponse.Result;
+    }
+
+    protected async Task<T> PutAsync<T>(
+        string url, object content, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    {
+        var response = await Client.PutAsJsonAsync(url, content);
+        response.StatusCode.ShouldBe(expectedStatusCode);
+        var strResponse = await response.Content.ReadAsStringAsync();
+        var ajaxResponse = JsonSerializer.Deserialize<AjaxResponse<T>>(strResponse, JsonSerializerOptions);
+        return ajaxResponse.Result;
+    }
+
+    protected async Task<T> PatchAsync<T>(
+        string url, object content, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    {
+        var response = await Client.PatchAsJsonAsync(url, content);
+        response.StatusCode.ShouldBe(expectedStatusCode);
+        var strResponse = await response.Content.ReadAsStringAsync();
+        var ajaxResponse = JsonSerializer.Deserialize<AjaxResponse<T>>(strResponse, JsonSerializerOptions);
+        return ajaxResponse.Result;
+    }
+
+    protected async Task<HttpResponseMessage> DeleteAsync(
+        string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+    {
+        var response = await Client.DeleteAsync(url);
         response.StatusCode.ShouldBe(expectedStatusCode);
         return response;
     }
@@ -77,9 +107,9 @@ public abstract class MyCodebaseWebTestBase : AbpAspNetCoreIntegratedTestBase<St
     /// <param name="tenancyName"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    protected async Task AuthenticateAsync(string tenancyName, AuthenticateModel input)
+    protected async Task AuthenticateAsync(string tenancyName, LoginRequestDto input)
     {
-        if (tenancyName.IsNullOrWhiteSpace())
+        if (!tenancyName.IsNullOrWhiteSpace())
         {
             var tenant = UsingDbContext(context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName));
             if (tenant != null)
@@ -89,13 +119,10 @@ public abstract class MyCodebaseWebTestBase : AbpAspNetCoreIntegratedTestBase<St
             }
         }
 
-        var response = await Client.PostAsync("/api/TokenAuth/Authenticate",
+        var response = await Client.PostAsync("/api/identity/accounts/login",
             new StringContent(input.ToJsonString(), Encoding.UTF8, "application/json"));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
-        var result = JsonSerializer.Deserialize<AjaxResponse<AuthenticateResultModel>>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var result = JsonSerializer.Deserialize<AjaxResponse<LoginResultDto>>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions);
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Result.AccessToken);
 
         AbpSession.UserId = result.Result.UserId;

@@ -1,23 +1,19 @@
-﻿using Abp.Application.Services.Dto;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.IdentityFramework;
 using Abp.Linq.Extensions;
-using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
 using datntdev.MyCodebase.Authorization.Permissions;
 using datntdev.MyCodebase.Authorization.Roles;
-using datntdev.MyCodebase.Authorization.Roles.Dto;
 using datntdev.MyCodebase.Authorization.Users.Dto;
 using datntdev.MyCodebase.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -128,13 +124,6 @@ public class UsersAppService(
 
         user.Password = passwordHasher.HashPassword(user, input.NewPassword);
         await CurrentUnitOfWork.SaveChangesAsync();
-    }
-
-    protected override User MapToEntity(Dto.CreateRequestDto createInput)
-    {
-        var user = ObjectMapper.Map<User>(createInput);
-        user.SetNormalizedNames();
-        return user;
     }
 
     protected override void MapToEntity(UserDto input, User user)

@@ -3,13 +3,13 @@ using Abp.AspNetCore.TestBase;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using datntdev.MyCodebase.EntityFrameworkCore;
-using datntdev.MyCodebase.Web.Startup;
+using datntdev.MyCodebase.Web.Host.Startup;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace datntdev.MyCodebase.Web.Tests;
 
 [DependsOn(
-    typeof(MyCodebaseWebMvcModule),
+    typeof(MyCodebaseWebHostModule),
     typeof(AbpAspNetCoreTestBaseModule)
 )]
 public class MyCodebaseWebTestModule : AbpModule
@@ -32,6 +32,6 @@ public class MyCodebaseWebTestModule : AbpModule
     public override void PostInitialize()
     {
         IocManager.Resolve<ApplicationPartManager>()
-            .AddApplicationPartsIfNotAddedBefore(typeof(MyCodebaseWebMvcModule).Assembly);
+            .AddApplicationPartsIfNotAddedBefore(typeof(MyCodebaseWebHostModule).Assembly);
     }
 }

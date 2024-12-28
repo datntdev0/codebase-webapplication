@@ -6,12 +6,13 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F10AA149-2626-486E-85BB-9CD5365F3016}"
+	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.runsettings = CodeCoverage.runsettings
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "datntdev.MyCodebase.Core", "src\datntdev.MyCodebase.Core\datntdev.MyCodebase.Core.csproj", "{0FA75A5B-AB83-4FD0-B545-279774C01E87}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "datntdev.MyCodebase.Application", "src\datntdev.MyCodebase.Application\datntdev.MyCodebase.Application.csproj", "{3870C648-4AEA-4B85-BA3F-F2F63B96136A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "datntdev.MyCodebase.Tests", "test\datntdev.MyCodebase.Tests\datntdev.MyCodebase.Tests.csproj", "{0D4C5D00-C144-4213-A007-4B8944113AB1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "datntdev.MyCodebase.Migrator", "src\datntdev.MyCodebase.Migrator\datntdev.MyCodebase.Migrator.csproj", "{880B3591-E057-46FE-B525-10BD83828B93}"
 EndProject
@@ -24,6 +25,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "datntdev.MyCodebase.Core.Shared", "src\datntdev.MyCodebase.Core.Shared\datntdev.MyCodebase.Core.Shared.csproj", "{8F907478-915B-4502-A7DE-D15810D6D60F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "datntdev.MyCodebase.Application.Contracts", "src\datntdev.MyCodebase.Application.Contracts\datntdev.MyCodebase.Application.Contracts.csproj", "{E734A490-1BB0-43DC-890C-C7B41F694D3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "datntdev.MyCodebase.Web.Tests", "test\datntdev.MyCodebase.Web.Tests\datntdev.MyCodebase.Web.Tests.csproj", "{36D4E518-FF2E-4371-AF73-28F48AB5D95D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +42,6 @@ Global
 		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3870C648-4AEA-4B85-BA3F-F2F63B96136A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D4C5D00-C144-4213-A007-4B8944113AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D4C5D00-C144-4213-A007-4B8944113AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D4C5D00-C144-4213-A007-4B8944113AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D4C5D00-C144-4213-A007-4B8944113AB1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{880B3591-E057-46FE-B525-10BD83828B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{880B3591-E057-46FE-B525-10BD83828B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{880B3591-E057-46FE-B525-10BD83828B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,6 +66,10 @@ Global
 		{E734A490-1BB0-43DC-890C-C7B41F694D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E734A490-1BB0-43DC-890C-C7B41F694D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E734A490-1BB0-43DC-890C-C7B41F694D3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D4E518-FF2E-4371-AF73-28F48AB5D95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D4E518-FF2E-4371-AF73-28F48AB5D95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D4E518-FF2E-4371-AF73-28F48AB5D95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D4E518-FF2E-4371-AF73-28F48AB5D95D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,13 +77,13 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0FA75A5B-AB83-4FD0-B545-279774C01E87} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{3870C648-4AEA-4B85-BA3F-F2F63B96136A} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
-		{0D4C5D00-C144-4213-A007-4B8944113AB1} = {F10AA149-2626-486E-85BB-9CD5365F3016}
 		{880B3591-E057-46FE-B525-10BD83828B93} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{38E184BD-E874-4633-A947-AED4FDB73F40} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{8F907478-915B-4502-A7DE-D15810D6D60F} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{E734A490-1BB0-43DC-890C-C7B41F694D3A} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
+		{36D4E518-FF2E-4371-AF73-28F48AB5D95D} = {F10AA149-2626-486E-85BB-9CD5365F3016}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9A55C749-0BFF-4EFD-8499-12A2CB3B5B07}
