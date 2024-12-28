@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 namespace datntdev.MyCodebase.Authorization.Users;
 
 [AbpAuthorize(PermissionNames.Pages_Users)]
-public class UserAppService(
+public class UsersAppService(
     IRepository<User, long> repository,
     UserManager userManager,
     RoleManager roleManager,
@@ -33,7 +33,7 @@ public class UserAppService(
     IPasswordHasher<User> passwordHasher,
     IAbpSession abpSession,
     LoginManager logInManager
-) : AsyncCrudAppService<User, UserDto, long, GetAllRequestDto, Dto.CreateRequestDto, UserDto>(repository), IUserAppService
+) : AsyncCrudAppService<User, UserDto, long, GetAllRequestDto, Dto.CreateRequestDto, UserDto>(repository), IUsersAppService
 {
     public override async Task<UserDto> CreateAsync(Dto.CreateRequestDto input)
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace datntdev.MyCodebase.Authorization.Users;
 
-public interface IUserAppService : IAsyncCrudAppService<UserDto, long, GetAllRequestDto, Dto.CreateRequestDto, UserDto>
+public interface IUsersAppService : IAsyncCrudAppService<UserDto, long, GetAllRequestDto, Dto.CreateRequestDto, UserDto>
 {
     Task DeActivate(EntityDto<long> user);
     Task Activate(EntityDto<long> user);

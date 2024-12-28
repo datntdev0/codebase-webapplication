@@ -21,15 +21,16 @@ using System.Threading.Tasks;
 
 namespace datntdev.MyCodebase.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/identity")]
     public class IdentityController(
+        TenantManager tenantManager,
         LoginManager logInManager,
         UserRegistrationManager userRegistrationManager,
         ITenantCache tenantCache,
         TokenAuthConfiguration configuration
     ) : MyCodebaseControllerBase
     {
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<LoginResultDto> LoginAsync([FromBody] LoginRequestDto model)
         {
             var loginResult = await GetLoginResultAsync(
@@ -49,8 +50,7 @@ namespace datntdev.MyCodebase.Controllers
             };
         }
 
-
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<RegisterResultDto> Register(RegisterRequestDto input)
         {
             var user = await userRegistrationManager.RegisterAsync(
@@ -71,7 +71,7 @@ namespace datntdev.MyCodebase.Controllers
             };
         }
 
-        [HttpGet]
+        [HttpGet("session")]
         [DisableAuditing]
         public async Task<SessionDto> GetSessionAsync()
         {
@@ -96,6 +96,24 @@ namespace datntdev.MyCodebase.Controllers
             }
 
             return output;
+        }
+
+        [HttpGet("tenant-availability")]
+        public async Task<TenantAvailabilityResultDto> IsTenantAvailableAsync(
+            [FromQuery] string tenancyName)
+        {
+            var tenant = await tenantManager.FindByTenancyNameAsync(tenancyName);
+            if (tenant == null)
+            {
+                return new(AvailabilityState.NotFound);
+            }
+
+            if (!tenant.IsActive)
+            {
+                return new(AvailabilityState.InActive);
+            }
+
+            return new(AvailabilityState.Available, tenant.Id);
         }
 
         private string GetTenancyNameOrNull()

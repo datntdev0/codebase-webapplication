@@ -18,11 +18,11 @@ using System.Threading.Tasks;
 namespace datntdev.MyCodebase.Authorization.Roles;
 
 [AbpAuthorize(PermissionNames.Pages_Roles)]
-public class RoleAppService(
+public class RolesAppService(
     IRepository<Role> repository,
     RoleManager roleManager,
     UserManager userManager
-) : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>(repository), IRoleAppService
+) : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>(repository), IRolesAppService
 {
     public override async Task<RoleDto> CreateAsync(CreateRequestDto input)
     {

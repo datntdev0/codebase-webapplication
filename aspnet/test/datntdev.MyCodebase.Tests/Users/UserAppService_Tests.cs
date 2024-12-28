@@ -9,11 +9,11 @@ namespace datntdev.MyCodebase.Tests.Users;
 
 public class UserAppService_Tests : MyCodebaseTestBase
 {
-    private readonly IUserAppService _userAppService;
+    private readonly IUsersAppService _userAppService;
 
     public UserAppService_Tests()
     {
-        _userAppService = Resolve<IUserAppService>();
+        _userAppService = Resolve<IUsersAppService>();
     }
 
     [Fact]

@@ -20,32 +20,15 @@ using System.Threading.Tasks;
 namespace datntdev.MyCodebase.MultiTenancy;
 
 [AbpAuthorize(PermissionNames.Pages_Tenants)]
-public class TenantAppService(
+public class TenantsAppService(
     IRepository<Tenant, int> repository,
     TenantManager tenantManager,
     EditionManager editionManager,
     UserManager userManager,
     RoleManager roleManager,
     IAbpZeroDbMigrator abpZeroDbMigrator
-) : AsyncCrudAppService<Tenant, TenantDto, int, GetAllRequestDto, CreateRequestDto, TenantDto>(repository), ITenantAppService
+) : AsyncCrudAppService<Tenant, TenantDto, int, GetAllRequestDto, CreateRequestDto, TenantDto>(repository), ITenantsAppService
 {
-    [AbpAllowAnonymous]
-    public async Task<IsAvailableResultDto> IsAvailableAsync(IsAvailableRequestDto input)
-    {
-        var tenant = await tenantManager.FindByTenancyNameAsync(input.TenancyName);
-        if (tenant == null)
-        {
-            return new IsAvailableResultDto(AvailabilityState.NotFound);
-        }
-
-        if (!tenant.IsActive)
-        {
-            return new IsAvailableResultDto(AvailabilityState.InActive);
-        }
-
-        return new IsAvailableResultDto(AvailabilityState.Available, tenant.Id);
-    }
-
     public override async Task<TenantDto> CreateAsync(CreateRequestDto input)
     {
         CheckCreatePermission();

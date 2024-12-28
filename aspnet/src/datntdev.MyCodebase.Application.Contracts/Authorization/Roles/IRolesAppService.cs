@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace datntdev.MyCodebase.Authorization.Roles;
 
-public interface IRoleAppService : IAsyncCrudAppService<RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>
+public interface IRolesAppService : IAsyncCrudAppService<RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>
 {
     Task<ListResultDto<PermissionDto>> GetAllPermissions();
 

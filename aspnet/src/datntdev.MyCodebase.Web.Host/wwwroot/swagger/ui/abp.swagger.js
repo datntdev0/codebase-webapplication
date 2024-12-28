@@ -62,7 +62,7 @@ var abp = abp || {};
             }
         };
 
-        xhr.open('POST', '/api/Session/Authenticate', true);
+        xhr.open('POST', '/api/identity/login', true);
         xhr.setRequestHeader('Abp-TenantId', tenantId);
         xhr.setRequestHeader('Content-type', 'application/json');
         addAntiForgeryTokenToXhr(xhr);
@@ -91,12 +91,10 @@ var abp = abp || {};
                 }
             };
 
-            xhrTenancyName.open('POST', '/api/services/app/Tenant/IsAvailable', true);
+            xhrTenancyName.open('GET', `/api/identity/tenant-availability?tenancyName=${tenancyName}`, true);
             xhrTenancyName.setRequestHeader('Content-type', 'application/json');
+            xhrTenancyName.send();
             addAntiForgeryTokenToXhr(xhrTenancyName);
-            xhrTenancyName.send(
-                JSON.stringify({ tenancyName: tenancyName })
-            );
         } else {
             loginUserInternal(null, callback); // Login for host
         }
