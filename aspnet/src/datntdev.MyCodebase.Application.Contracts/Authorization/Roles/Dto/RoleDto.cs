@@ -21,4 +21,6 @@ public class RoleDto : EntityDto<int>
     public string Description { get; set; }
 
     public List<string> GrantedPermissions { get; set; }
+
+    public bool IsStatic { get; set; }
 }

@@ -62,7 +62,7 @@ var abp = abp || {};
             }
         };
 
-        xhr.open('POST', '/api/identity/login', true);
+        xhr.open('POST', '/api/identity/accounts/login', true);
         xhr.setRequestHeader('Abp-TenantId', tenantId);
         xhr.setRequestHeader('Content-type', 'application/json');
         addAntiForgeryTokenToXhr(xhr);
@@ -83,7 +83,7 @@ var abp = abp || {};
                 if (xhrTenancyName.readyState === XMLHttpRequest.DONE && xhrTenancyName.status === 200) {
                     var responseJSON = JSON.parse(xhrTenancyName.responseText);
                     var result = responseJSON.result;
-                    if (result.state === 1) { // Tenant exists and active.
+                    if (result.status === 1) { // Tenant exists and active.
                         loginUserInternal(result.tenantId, callback); // Login for tenant    
                     } else {
                         alert('There is no such tenant or tenant is not active !');
@@ -91,7 +91,7 @@ var abp = abp || {};
                 }
             };
 
-            xhrTenancyName.open('GET', `/api/identity/tenant-availability?tenancyName=${tenancyName}`, true);
+            xhrTenancyName.open('GET', `/api/identity/tenants/statuses?name=${tenancyName}`, true);
             xhrTenancyName.setRequestHeader('Content-type', 'application/json');
             xhrTenancyName.send();
             addAntiForgeryTokenToXhr(xhrTenancyName);

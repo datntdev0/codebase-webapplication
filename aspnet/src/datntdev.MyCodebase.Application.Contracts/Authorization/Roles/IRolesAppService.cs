@@ -4,11 +4,7 @@ using System.Threading.Tasks;
 
 namespace datntdev.MyCodebase.Authorization.Roles;
 
-public interface IRolesAppService : IMyCodebaseCrudAppService<RoleDto, int, PagedRoleResultRequestDto, CreateRequestDto, RoleDto>
+public interface IRolesAppService : IMyCodebaseCrudAppService<RoleDto, int, GetAllRequestDto, CreateRequestDto, RoleDto>
 {
-    Task<ListResultDto<PermissionDto>> GetAllPermissions();
-
-    Task<GetRoleForEditOutput> GetRoleForEdit(EntityDto input);
-
-    Task<ListResultDto<RoleListDto>> GetRolesAsync(GetRolesInput input);
+    Task<ListResultDto<PermissionDto>> GetPermissionsAsync();
 }

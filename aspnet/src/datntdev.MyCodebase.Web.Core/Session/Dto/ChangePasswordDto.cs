@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace datntdev.MyCodebase.Authorization.Users.Dto;
+namespace datntdev.MyCodebase.Session.Dto;
 
 public class ChangePasswordDto
 {

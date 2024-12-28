@@ -1,5 +1,4 @@
-﻿using Abp.Auditing;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.MultiTenancy;
@@ -30,7 +29,7 @@ namespace datntdev.MyCodebase.Controllers
         TokenAuthConfiguration configuration
     ) : MyCodebaseControllerBase
     {
-        [HttpPost("login")]
+        [HttpPost("accounts/login")]
         public async Task<LoginResultDto> LoginAsync([FromBody] LoginRequestDto model)
         {
             var loginResult = await GetLoginResultAsync(
@@ -50,7 +49,7 @@ namespace datntdev.MyCodebase.Controllers
             };
         }
 
-        [HttpPost("register")]
+        [HttpPost("accounts/register")]
         public async Task<RegisterResultDto> Register(RegisterRequestDto input)
         {
             var user = await userRegistrationManager.RegisterAsync(
@@ -71,49 +70,21 @@ namespace datntdev.MyCodebase.Controllers
             };
         }
 
-        [HttpGet("session")]
-        [DisableAuditing]
-        public async Task<SessionDto> GetSessionAsync()
+        [HttpGet("tenants/statuses")]
+        public async Task<TenantStatusResultDto> GetTenantStatusAsync([FromQuery] string name)
         {
-            var output = new SessionDto
-            {
-                Application = new ApplicationInfoDto
-                {
-                    Version = MyCodebaseConsts.Version,
-                    ReleaseDate = MyCodebaseConsts.ReleaseDate,
-                    Features = [],
-                }
-            };
-
-            if (AbpSession.TenantId.HasValue)
-            {
-                output.Tenant = ObjectMapper.Map<TenantLoginInfoDto>(await GetCurrentTenantAsync());
-            }
-
-            if (AbpSession.UserId.HasValue)
-            {
-                output.User = ObjectMapper.Map<UserLoginInfoDto>(await GetCurrentUserAsync());
-            }
-
-            return output;
-        }
-
-        [HttpGet("tenant-availability")]
-        public async Task<TenantAvailabilityResultDto> IsTenantAvailableAsync(
-            [FromQuery] string tenancyName)
-        {
-            var tenant = await tenantManager.FindByTenancyNameAsync(tenancyName);
+            var tenant = await tenantManager.FindByTenancyNameAsync(name);
             if (tenant == null)
             {
-                return new(AvailabilityState.NotFound);
+                return new(TenantStatus.NotFound);
             }
 
             if (!tenant.IsActive)
             {
-                return new(AvailabilityState.InActive);
+                return new(TenantStatus.InActive);
             }
 
-            return new(AvailabilityState.Available, tenant.Id);
+            return new(TenantStatus.Available, tenant.Id);
         }
 
         private string GetTenancyNameOrNull()
@@ -198,29 +169,6 @@ namespace datntdev.MyCodebase.Controllers
                 default: // Can not fall to default actually. But other result types can be added in the future and we may forget to handle it
                     Logger.Warn("Unhandled login fail reason: " + result);
                     return new UserFriendlyException(L("LoginFailed"));
-            }
-        }
-
-        private string CreateLocalizedMessageForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName)
-        {
-            switch (result)
-            {
-                case AbpLoginResultType.Success:
-                    throw new Exception("Don't call this method with a success result!");
-                case AbpLoginResultType.InvalidUserNameOrEmailAddress:
-                case AbpLoginResultType.InvalidPassword:
-                    return L("InvalidUserNameOrPassword");
-                case AbpLoginResultType.InvalidTenancyName:
-                    return L("ThereIsNoTenantDefinedWithName{0}", tenancyName);
-                case AbpLoginResultType.TenantIsNotActive:
-                    return L("TenantIsNotActive", tenancyName);
-                case AbpLoginResultType.UserIsNotActive:
-                    return L("UserIsNotActiveAndCanNotLogin", usernameOrEmailAddress);
-                case AbpLoginResultType.UserEmailIsNotConfirmed:
-                    return L("UserEmailIsNotConfirmedAndCanNotLogin");
-                default: // Can not fall to default actually. But other result types can be added in the future and we may forget to handle it
-                    Logger.Warn("Unhandled login fail reason: " + result);
-                    return L("LoginFailed");
             }
         }
     }

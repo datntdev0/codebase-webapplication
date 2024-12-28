@@ -3,10 +3,11 @@ using Abp.Runtime.Validation;
 
 namespace datntdev.MyCodebase.Authorization.Roles.Dto;
 
-public class PagedRoleResultRequestDto : PagedResultRequestDto, IShouldNormalize
+public class GetAllRequestDto : PagedResultRequestDto, IShouldNormalize
 {
     public string Keyword { get; set; }
     public string Sorting { get; set; }
+    public string Permission { get; set; }
 
     public void Normalize()
     {
@@ -16,6 +17,7 @@ public class PagedRoleResultRequestDto : PagedResultRequestDto, IShouldNormalize
         }
 
         Keyword = Keyword?.Trim();
+        Permission = Permission?.Trim();
     }
 }
 

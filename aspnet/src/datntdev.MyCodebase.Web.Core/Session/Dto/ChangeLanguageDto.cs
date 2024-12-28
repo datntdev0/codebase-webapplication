@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace datntdev.MyCodebase.Authorization.Users.Dto;
+namespace datntdev.MyCodebase.Session.Dto;
 
-public class ChangeUserLanguageDto
+public class ChangeLanguageDto
 {
     [Required]
     public string LanguageName { get; set; }

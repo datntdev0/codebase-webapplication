@@ -4,7 +4,7 @@ namespace datntdev.MyCodebase.Authorization.Roles.Dto;
 
 public class GetRoleForEditOutput
 {
-    public RoleEditDto Role { get; set; }
+    public RoleDto Role { get; set; }
 
     public List<FlatPermissionDto> Permissions { get; set; }
 

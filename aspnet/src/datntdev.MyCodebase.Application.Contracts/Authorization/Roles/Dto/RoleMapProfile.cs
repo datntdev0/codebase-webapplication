@@ -21,7 +21,6 @@ public class RoleMapProfile : Profile
             opt => opt.MapFrom(x => x.Permissions.Where(p => p.IsGranted)));
 
         CreateMap<Role, RoleListDto>();
-        CreateMap<Role, RoleEditDto>();
         CreateMap<Permission, FlatPermissionDto>();
     }
 }

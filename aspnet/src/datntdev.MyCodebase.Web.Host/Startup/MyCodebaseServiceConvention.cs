@@ -131,7 +131,17 @@ public class MyCodebaseServiceConvention : IApplicationModelConvention
                 selector.ActionConstraints.Add(new HttpMethodActionConstraint([httpMethod]));
             }
 
-            selector.AttributeRouteModel ??= CreateAbpServiceAttributeRouteModel(moduleName, controller, action);
+            if (selector.AttributeRouteModel != null)
+            {
+                var controllerName = controller.ControllerName.ToKebabCase();
+                var template = selector.AttributeRouteModel.Template;
+                selector.AttributeRouteModel.Template = $"api/services/{moduleName}/{controllerName}/{template}";
+            } 
+            else
+            {
+                selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controller, action);
+            }
+
         }
     }
 
