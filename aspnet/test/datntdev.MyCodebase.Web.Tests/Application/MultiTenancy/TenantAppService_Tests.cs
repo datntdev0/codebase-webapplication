@@ -18,7 +18,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.MultiTenancy
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var tenantDto = new CreateRequestDto
+            var tenantDto = new CreateTenantDto
             {
                 TenancyName = "TestTenant",
                 Name = "Test Tenant",

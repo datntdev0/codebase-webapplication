@@ -25,9 +25,9 @@ public class TenantsAppService(
     UserManager userManager,
     RoleManager roleManager,
     IAbpZeroDbMigrator abpZeroDbMigrator
-) : MyCodebaseCrudAppServicee<Tenant, TenantDto, int, GetAllRequestDto, CreateRequestDto, TenantDto>(repository), ITenantsAppService
+) : MyCodebaseCrudAppServicee<Tenant, TenantDto, int, GetAllTenantsDto, CreateTenantDto, TenantDto>(repository), ITenantsAppService
 {
-    public override async Task<TenantDto> CreateAsync(CreateRequestDto input)
+    public override async Task<TenantDto> CreateAsync(CreateTenantDto input)
     {
         CheckCreatePermission();
 
@@ -75,14 +75,14 @@ public class TenantsAppService(
         return MapToEntityDto(tenant);
     }
 
-    protected override IQueryable<Tenant> CreateFilteredQuery(GetAllRequestDto input)
+    protected override IQueryable<Tenant> CreateFilteredQuery(GetAllTenantsDto input)
     {
         return Repository.GetAll()
             .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Keyword) || x.Name.Contains(input.Keyword))
             .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
     }
 
-    protected override IQueryable<Tenant> ApplySorting(IQueryable<Tenant> query, GetAllRequestDto input)
+    protected override IQueryable<Tenant> ApplySorting(IQueryable<Tenant> query, GetAllTenantsDto input)
     {
         return query.OrderBy(input.Sorting);
     }

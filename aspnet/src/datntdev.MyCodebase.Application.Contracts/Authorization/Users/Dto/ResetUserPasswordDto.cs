@@ -2,7 +2,7 @@
 
 namespace datntdev.MyCodebase.Authorization.Users.Dto;
 
-public class ResetPasswordDto
+public class ResetUserPasswordDto
 {
     [Required]
     public string AdminPassword { get; set; }

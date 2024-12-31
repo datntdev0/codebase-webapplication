@@ -29,9 +29,9 @@ public class UsersAppService(
     IPasswordHasher<User> passwordHasher,
     IAbpSession abpSession,
     LoginManager logInManager
-) : MyCodebaseCrudAppServicee<User, UserDto, long, Dto.GetAllRequestDto, Dto.CreateRequestDto, UserDto>(repository), IUsersAppService
+) : MyCodebaseCrudAppServicee<User, UserDto, long, Dto.GetAllUsersDto, Dto.CreateUserDto, UserDto>(repository), IUsersAppService
 {
-    public override async Task<UserDto> CreateAsync(Dto.CreateRequestDto input)
+    public override async Task<UserDto> CreateAsync(Dto.CreateUserDto input)
     {
         CheckCreatePermission();
 
@@ -99,7 +99,7 @@ public class UsersAppService(
     }
 
     [Route("{id}/password")]
-    public async Task ResetPasswordAsync(long id, ResetPasswordDto input)
+    public async Task ResetPasswordAsync(long id, ResetUserPasswordDto input)
     {
         if (abpSession.UserId == null)
         {
@@ -144,7 +144,7 @@ public class UsersAppService(
         return userDto;
     }
 
-    protected override IQueryable<User> CreateFilteredQuery(Dto.GetAllRequestDto input)
+    protected override IQueryable<User> CreateFilteredQuery(Dto.GetAllUsersDto input)
     {
         return Repository.GetAllIncluding(x => x.Roles)
             .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.UserName.Contains(input.Keyword) || x.Name.Contains(input.Keyword) || x.EmailAddress.Contains(input.Keyword))
@@ -163,7 +163,7 @@ public class UsersAppService(
         return user;
     }
 
-    protected override IQueryable<User> ApplySorting(IQueryable<User> query, Dto.GetAllRequestDto input)
+    protected override IQueryable<User> ApplySorting(IQueryable<User> query, Dto.GetAllUsersDto input)
     {
         return query.OrderBy(input.Sorting);
     }

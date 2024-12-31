@@ -18,7 +18,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var roleDto = new CreateRequestDto
+            var roleDto = new CreateRoleDto
             {
                 Name = "TestRole",
                 DisplayName = "Test Role",
@@ -43,7 +43,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var roleDto = new CreateRequestDto
+            var roleDto = new CreateRoleDto
             {
                 Name = "TestRole",
                 DisplayName = "Test Role",
@@ -86,7 +86,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var roleDto = new CreateRequestDto
+            var roleDto = new CreateRoleDto
             {
                 Name = "TestRole",
                 DisplayName = "Test Role",

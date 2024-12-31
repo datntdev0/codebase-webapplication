@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace datntdev.MyCodebase.Authorization.Roles.Dto;
 
-public class CreateRequestDto
+public class CreateRoleDto
 {
     [Required]
     [StringLength(AbpRoleBase.MaxNameLength)]
@@ -21,7 +21,7 @@ public class CreateRequestDto
 
     public List<string> GrantedPermissions { get; set; }
 
-    public CreateRequestDto()
+    public CreateRoleDto()
     {
         GrantedPermissions = new List<string>();
     }

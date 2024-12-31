@@ -13,7 +13,7 @@ public class MapperProfile : Profile
 
         CreateMap<RolePermissionSetting, string>().ConvertUsing(r => r.Name);
 
-        CreateMap<CreateRequestDto, Role>();
+        CreateMap<CreateRoleDto, Role>();
 
         CreateMap<RoleDto, Role>();
 

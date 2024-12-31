@@ -1,23 +1,22 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Runtime.Validation;
 
-namespace datntdev.MyCodebase.Authorization.Roles.Dto;
+namespace datntdev.MyCodebase.Authorization.Users.Dto;
 
-public class GetAllRequestDto : PagedResultRequestDto, IShouldNormalize
+public class GetAllUsersDto : PagedResultRequestDto, IShouldNormalize
 {
     public string Keyword { get; set; }
+    public bool? IsActive { get; set; }
+
     public string Sorting { get; set; }
-    public string Permission { get; set; }
 
     public void Normalize()
     {
         if (string.IsNullOrEmpty(Sorting))
         {
-            Sorting = "Name,DisplayName";
+            Sorting = "UserName,EmailAddress";
         }
 
         Keyword = Keyword?.Trim();
-        Permission = Permission?.Trim();
     }
 }
-

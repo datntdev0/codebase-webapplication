@@ -17,7 +17,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var userDto = new CreateRequestDto
+            var userDto = new CreateUserDto
             {
                 UserName = "TestUser",
                 Name = "Test User",
@@ -45,7 +45,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var userDto = new CreateRequestDto
+            var userDto = new CreateUserDto
             {
                 UserName = "TestUser",
                 Name = "Test User",
@@ -90,7 +90,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var userDto = new CreateRequestDto
+            var userDto = new CreateUserDto
             {
                 UserName = "TestUser",
                 Name = "Test User",
@@ -121,7 +121,7 @@ namespace datntdev.MyCodebase.Web.Tests.Application.Authorization
                 UserNameOrEmailAddress = "admin",
                 Password = "123qwe"
             });
-            var resetPasswordDto = new ResetPasswordDto
+            var resetPasswordDto = new ResetUserPasswordDto
             {
                 UserId = 1,
                 AdminPassword = "123qwe",

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace datntdev.MyCodebase.Authorization.Users.Dto;
 
 [AutoMapTo(typeof(User))]
-public class CreateRequestDto
+public class CreateUserDto
 {
     [Required]
     [StringLength(AbpUserBase.MaxUserNameLength)]

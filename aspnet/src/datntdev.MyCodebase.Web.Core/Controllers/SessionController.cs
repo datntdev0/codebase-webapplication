@@ -40,7 +40,7 @@ namespace datntdev.MyCodebase.Controllers
         }
 
         [HttpPatch("language")]
-        public async Task ChangeLanguageAsync(ChangeLanguageDto input)
+        public async Task ChangeLanguageAsync([FromBody] ChangeLanguageDto input)
         {
             await SettingManager.ChangeSettingForUserAsync(
                 AbpSession.ToUserIdentifier(),
@@ -56,7 +56,7 @@ namespace datntdev.MyCodebase.Controllers
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         [HttpPatch("password")]
-        public async Task ChangePasswordAsync(ChangePasswordDto input)
+        public async Task ChangePasswordAsync([FromBody] ChangePasswordDto input)
         {
             await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
 

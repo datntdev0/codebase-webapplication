@@ -50,7 +50,7 @@ namespace datntdev.MyCodebase.Controllers
         }
 
         [HttpPost("accounts/register")]
-        public async Task<RegisterResultDto> Register(RegisterRequestDto input)
+        public async Task<RegisterResultDto> Register([FromBody] RegisterRequestDto input)
         {
             var user = await userRegistrationManager.RegisterAsync(
                 input.Name,

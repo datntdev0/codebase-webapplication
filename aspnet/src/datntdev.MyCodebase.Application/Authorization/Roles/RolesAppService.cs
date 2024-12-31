@@ -21,9 +21,9 @@ public class RolesAppService(
     IRepository<Role> repository,
     RoleManager roleManager,
     UserManager userManager
-) : MyCodebaseCrudAppServicee<Role, RoleDto, int, GetAllRequestDto, CreateRequestDto, RoleDto>(repository), IRolesAppService
+) : MyCodebaseCrudAppServicee<Role, RoleDto, int, GetAllRolesDto, CreateRoleDto, RoleDto>(repository), IRolesAppService
 {
-    public override async Task<RoleDto> CreateAsync(CreateRequestDto input)
+    public override async Task<RoleDto> CreateAsync(CreateRoleDto input)
     {
         CheckCreatePermission();
 
@@ -86,7 +86,7 @@ public class RolesAppService(
         ));
     }
 
-    protected override IQueryable<Role> CreateFilteredQuery(GetAllRequestDto input)
+    protected override IQueryable<Role> CreateFilteredQuery(GetAllRolesDto input)
     {
         return Repository.GetAllIncluding(x => x.Permissions)
             .WhereIf(!input.Keyword.IsNullOrWhiteSpace(),
@@ -102,7 +102,7 @@ public class RolesAppService(
         return await Repository.GetAllIncluding(x => x.Permissions).FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    protected override IQueryable<Role> ApplySorting(IQueryable<Role> query, GetAllRequestDto input)
+    protected override IQueryable<Role> ApplySorting(IQueryable<Role> query, GetAllRolesDto input)
     {
         return query.OrderBy(input.Sorting);
     }

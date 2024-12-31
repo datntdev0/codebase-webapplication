@@ -11,7 +11,7 @@ public class MapperProfile : Profile
             .ForMember(x => x.Roles, opt => opt.Ignore())
             .ForMember(x => x.CreationTime, opt => opt.Ignore());
 
-        CreateMap<CreateRequestDto, User>();
-        CreateMap<CreateRequestDto, User>().ForMember(x => x.Roles, opt => opt.Ignore());
+        CreateMap<CreateUserDto, User>();
+        CreateMap<CreateUserDto, User>().ForMember(x => x.Roles, opt => opt.Ignore());
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.Runtime.Validation;
 
-namespace datntdev.MyCodebase.Authorization.Users.Dto;
+namespace datntdev.MyCodebase.MultiTenancy.Dto;
 
-public class GetAllRequestDto : PagedResultRequestDto, IShouldNormalize
+public class GetAllTenantsDto : PagedResultRequestDto, IShouldNormalize
 {
     public string Keyword { get; set; }
     public bool? IsActive { get; set; }
@@ -14,9 +14,10 @@ public class GetAllRequestDto : PagedResultRequestDto, IShouldNormalize
     {
         if (string.IsNullOrEmpty(Sorting))
         {
-            Sorting = "UserName,EmailAddress";
+            Sorting = "TenancyName,Name";
         }
 
         Keyword = Keyword?.Trim();
     }
 }
+
