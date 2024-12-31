@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace datntdev.MyCodebase.Web.Host.Startup
 {
@@ -136,7 +137,10 @@ namespace datntdev.MyCodebase.Web.Host.Startup
                         Url = new Uri("https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/LICENSE.md"),
                     }
                 });
-                options.CustomSchemaIds(type => type.FullName);
+                options.CustomOperationIds(des => {
+                    var descriptor = des.ActionDescriptor as ControllerActionDescriptor;
+                    return $"{descriptor.ControllerName}_{descriptor.ActionName}";
+                });
                 options.DocInclusionPredicate((docName, description) => true);
 
                 // Define the BearerAuth scheme that's in use
