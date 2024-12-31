@@ -11,9 +11,9 @@ import {
   PagedListingComponentBase,
 } from "@shared/paged-listing-component-base";
 import {
-  RoleServiceProxy,
   RoleDto,
   RoleDtoPagedResultDto,
+  RolesServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { CreateRoleDialogComponent } from "./create-role/create-role-dialog.component";
 import { EditRoleDialogComponent } from "./edit-role/edit-role-dialog.component";
@@ -34,7 +34,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
 
   constructor(
     injector: Injector,
-    private _rolesService: RoleServiceProxy,
+    private _roleService: RolesServiceProxy,
     private _modalService: BsModalService,
     private _activatedRoute: ActivatedRoute,
     cd: ChangeDetectorRef
@@ -58,9 +58,10 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
 
     this.primengTableHelper.showLoadingIndicator();
 
-    this._rolesService
+    this._roleService
       .getAll(
         this.keyword,
+        undefined,
         this.primengTableHelper.getSorting(this.dataTable),
         this.primengTableHelper.getSkipCount(this.paginator, event),
         this.primengTableHelper.getMaxResultCount(this.paginator, event)
@@ -84,7 +85,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
       undefined,
       (result: boolean) => {
         if (result) {
-          this._rolesService
+          this._roleService
             .delete(role.id)
             .pipe(
               finalize(() => {

@@ -2,7 +2,7 @@ import { AbpMultiTenancyService } from 'abp-ng2-module';
 import { Injectable } from '@angular/core';
 import {
     ApplicationInfoDto,
-    GetCurrentLoginInformationsOutput,
+    SessionDto,
     SessionServiceProxy,
     TenantLoginInfoDto,
     UserLoginInfoDto
@@ -51,7 +51,7 @@ export class AppSessionService {
 
     init(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            this._sessionService.getCurrentLoginInformations().toPromise().then((result: GetCurrentLoginInformationsOutput) => {
+            this._sessionService.getSession().toPromise().then((result) => {
                 this._application = result.application;
                 this._user = result.user;
                 this._tenant = result.tenant;

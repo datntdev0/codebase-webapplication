@@ -10,9 +10,10 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { forEach as _forEach, map as _map } from 'lodash-es';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  UserServiceProxy,
   CreateUserDto,
-  RoleDto
+  RoleDto,
+  RolesServiceProxy,
+  UsersServiceProxy
 } from '@shared/service-proxies/service-proxies';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 
@@ -44,7 +45,8 @@ export class CreateUserDialogComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    public _userService: UserServiceProxy,
+    public _userService: UsersServiceProxy,
+    public _roleService: RolesServiceProxy,
     public bsModalRef: BsModalRef,
     private cd: ChangeDetectorRef
   ) {
@@ -54,7 +56,7 @@ export class CreateUserDialogComponent extends AppComponentBase
   ngOnInit(): void {
     this.user.isActive = true;
 
-    this._userService.getRoles().subscribe((result) => {
+    this._roleService.getAll().subscribe((result) => {
       this.roles = result.items;
       this.setInitialRolesStatus();
       this.cd.detectChanges();

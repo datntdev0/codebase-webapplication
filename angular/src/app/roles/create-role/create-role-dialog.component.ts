@@ -9,11 +9,11 @@ import {
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  RoleServiceProxy,
   RoleDto,
   PermissionDto,
   CreateRoleDto,
-  PermissionDtoListResultDto
+  PermissionDtoListResultDto,
+  RolesServiceProxy
 } from '@shared/service-proxies/service-proxies';
 import { forEach as _forEach, map as _map } from 'lodash-es';
 
@@ -32,7 +32,7 @@ export class CreateRoleDialogComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    private _roleService: RoleServiceProxy,
+    private _roleService: RolesServiceProxy,
     public bsModalRef: BsModalRef,
     private cd: ChangeDetectorRef
   ) {
@@ -41,7 +41,7 @@ export class CreateRoleDialogComponent extends AppComponentBase
 
   ngOnInit(): void {
     this._roleService
-      .getAllPermissions()
+      .getPermissions()
       .subscribe((result: PermissionDtoListResultDto) => {
         this.permissions = result.items;
         this.setInitialPermissionsStatus();

@@ -5,7 +5,7 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   ChangePasswordDto,
-  UserServiceProxy
+  SessionServiceProxy,
 } from '@shared/service-proxies/service-proxies';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 
@@ -32,7 +32,7 @@ export class ChangePasswordComponent extends AppComponentBase {
 
   constructor(
     injector: Injector,
-    private userServiceProxy: UserServiceProxy,
+    private sessionService: SessionServiceProxy,
     private router: Router
   ) {
     super(injector);
@@ -41,18 +41,16 @@ export class ChangePasswordComponent extends AppComponentBase {
   changePassword() {
     this.saving = true;
 
-    this.userServiceProxy
+    this.sessionService
       .changePassword(this.changePasswordDto)
       .pipe(
         finalize(() => {
           this.saving = false;
         })
       )
-      .subscribe((success) => {
-        if (success) {
-          abp.message.success('Password changed successfully', 'Success');
-          this.router.navigate(['/']);
-        }
+      .subscribe((_) => {
+        abp.message.success('Password changed successfully', 'Success');
+        this.router.navigate(['/']);
       });
   }
 }

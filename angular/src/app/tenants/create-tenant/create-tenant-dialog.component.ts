@@ -10,7 +10,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   CreateTenantDto,
-  TenantServiceProxy
+  TenantsServiceProxy,
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -25,7 +25,7 @@ export class CreateTenantDialogComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    public _tenantService: TenantServiceProxy,
+    public _tenantService: TenantsServiceProxy,
     public bsModalRef: BsModalRef,
     private cd: ChangeDetectorRef
   ) {

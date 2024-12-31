@@ -9,9 +9,9 @@ import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { PagedListingComponentBase } from "shared/paged-listing-component-base";
 import {
-  UserServiceProxy,
   UserDto,
   UserDtoPagedResultDto,
+  UsersServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { CreateUserDialogComponent } from "./create-user/create-user-dialog.component";
 import { EditUserDialogComponent } from "./edit-user/edit-user-dialog.component";
@@ -35,7 +35,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
 
   constructor(
     injector: Injector,
-    private _userService: UserServiceProxy,
+    private _userService: UsersServiceProxy,
     private _modalService: BsModalService,
     private _activatedRoute: ActivatedRoute,
     cd: ChangeDetectorRef

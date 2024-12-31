@@ -9,14 +9,7 @@ import {
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { forEach as _forEach, includes as _includes, map as _map } from 'lodash-es';
 import { AppComponentBase } from '@shared/app-component-base';
-import {
-  RoleServiceProxy,
-  GetRoleForEditOutput,
-  RoleDto,
-  PermissionDto,
-  RoleEditDto,
-  FlatPermissionDto
-} from '@shared/service-proxies/service-proxies';
+import { PermissionDto, RoleDto, RolesServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
   templateUrl: 'edit-role-dialog.component.html'
@@ -25,8 +18,8 @@ export class EditRoleDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   id: number;
-  role = new RoleEditDto();
-  permissions: FlatPermissionDto[];
+  role = new RoleDto();
+  permissions: PermissionDto[];
   grantedPermissionNames: string[];
   checkedPermissionsMap: { [key: string]: boolean } = {};
 
@@ -34,7 +27,7 @@ export class EditRoleDialogComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    private _roleService: RoleServiceProxy,
+    private _roleService: RolesServiceProxy,
     public bsModalRef: BsModalRef,
     private cd: ChangeDetectorRef
   ) {
@@ -42,14 +35,17 @@ export class EditRoleDialogComponent extends AppComponentBase
   }
 
   ngOnInit(): void {
-    this._roleService
-      .getRoleForEdit(this.id)
-      .subscribe((result: GetRoleForEditOutput) => {
-        this.role = result.role;
-        this.permissions = result.permissions;
-        this.grantedPermissionNames = result.grantedPermissionNames;
-        this.setInitialPermissionsStatus();
-        this.cd.detectChanges();
+    this._roleService.getPermissions().toPromise()
+      .then((permissions) => {
+        this.permissions = permissions.items;
+        this._roleService
+          .get(this.id)
+          .subscribe((result) => {
+            this.role = result;
+            this.grantedPermissionNames = result.grantedPermissions;
+            this.setInitialPermissionsStatus();
+            this.cd.detectChanges();
+          });
       });
   }
 
@@ -65,7 +61,7 @@ export class EditRoleDialogComponent extends AppComponentBase
     return _includes(this.grantedPermissionNames, permissionName);
   }
 
-  onPermissionChange(permission: FlatPermissionDto, $event) {
+  onPermissionChange(permission: PermissionDto, $event) {
     this.checkedPermissionsMap[permission.name] = $event.target.checked;
   }
 

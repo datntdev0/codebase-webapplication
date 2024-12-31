@@ -10,9 +10,10 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { forEach as _forEach, includes as _includes, map as _map } from 'lodash-es';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  UserServiceProxy,
   UserDto,
-  RoleDto
+  RoleDto,
+  UsersServiceProxy,
+  RolesServiceProxy
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -30,7 +31,8 @@ export class EditUserDialogComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    public _userService: UserServiceProxy,
+    public _userService: UsersServiceProxy,
+    public _roleService: RolesServiceProxy,
     public bsModalRef: BsModalRef,
     private cd: ChangeDetectorRef
   ) {
@@ -41,7 +43,7 @@ export class EditUserDialogComponent extends AppComponentBase
     this._userService.get(this.id).subscribe((result) => {
       this.user = result;
 
-      this._userService.getRoles().subscribe((result2) => {
+      this._roleService.getAll().subscribe((result2) => {
         this.roles = result2.items;
         this.setInitialRolesStatus();
         this.cd.detectChanges();

@@ -4,20 +4,16 @@ import { finalize } from 'rxjs/operators';
 import { TokenService, LogService, UtilsService } from 'abp-ng2-module';
 import { AppConsts } from '@shared/AppConsts';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
-import {
-    AuthenticateModel,
-    AuthenticateResultModel,
-    TokenAuthServiceProxy,
-} from '@shared/service-proxies/service-proxies';
+import { IdentityServiceProxy, LoginRequestDto, LoginResultDto } from '@shared/service-proxies/service-proxies';
 
 @Injectable()
 export class AppAuthService {
-    authenticateModel: AuthenticateModel;
-    authenticateResult: AuthenticateResultModel;
+    loginRequestDto: LoginRequestDto;
+    loginResultDto: LoginResultDto;
     rememberMe: boolean;
 
     constructor(
-        private _tokenAuthService: TokenAuthServiceProxy,
+        private _identityService: IdentityServiceProxy,
         private _router: Router,
         private _utilsService: UtilsService,
         private _tokenService: TokenService,
@@ -38,29 +34,29 @@ export class AppAuthService {
     authenticate(finallyCallback?: () => void): void {
         finallyCallback = finallyCallback || (() => { });
 
-        this._tokenAuthService
-            .authenticate(this.authenticateModel)
+        this._identityService
+            .login(this.loginRequestDto)
             .pipe(
                 finalize(() => {
                     finallyCallback();
                 })
             )
-            .subscribe((result: AuthenticateResultModel) => {
+            .subscribe((result) => {
                 this.processAuthenticateResult(result);
             });
     }
 
     private processAuthenticateResult(
-        authenticateResult: AuthenticateResultModel
+        loginResultDto: LoginResultDto
     ) {
-        this.authenticateResult = authenticateResult;
+        this.loginResultDto = loginResultDto;
 
-        if (authenticateResult.accessToken) {
+        if (loginResultDto.accessToken) {
             // Successfully logged in
             this.login(
-                authenticateResult.accessToken,
-                authenticateResult.encryptedAccessToken,
-                authenticateResult.expireInSeconds,
+                loginResultDto.accessToken,
+                loginResultDto.encryptedAccessToken,
+                loginResultDto.expireInSeconds,
                 this.rememberMe
             );
         } else {
@@ -99,9 +95,9 @@ export class AppAuthService {
     }
 
     private clear(): void {
-        this.authenticateModel = new AuthenticateModel();
-        this.authenticateModel.rememberClient = false;
-        this.authenticateResult = null;
+        this.loginRequestDto = new LoginRequestDto();
+        this.loginRequestDto.rememberClient = false;
+        this.loginResultDto = null;
         this.rememberMe = false;
     }
 }

@@ -1,8 +1,8 @@
-import { TenantAvailabilityState } from '@shared/service-proxies/service-proxies';
+import { TenantStatus } from '@shared/service-proxies/service-proxies';
 
 
 export class AppTenantAvailabilityState {
-    static Available: number = TenantAvailabilityState._1;
-    static InActive: number = TenantAvailabilityState._2;
-    static NotFound: number = TenantAvailabilityState._3;
+    static NotFound: number = TenantStatus._0;
+    static Available: number = TenantStatus._1;
+    static InActive: number = TenantStatus._2;
 }

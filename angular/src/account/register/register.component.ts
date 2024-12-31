@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  AccountServiceProxy,
-  RegisterInput,
-  RegisterOutput
+  IdentityServiceProxy,
+  RegisterRequestDto,
 } from '@shared/service-proxies/service-proxies';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppAuthService } from '@shared/auth/app-auth.service';
@@ -15,12 +14,12 @@ import { AppAuthService } from '@shared/auth/app-auth.service';
   animations: [accountModuleAnimation()]
 })
 export class RegisterComponent extends AppComponentBase {
-  model: RegisterInput = new RegisterInput();
+  model: RegisterRequestDto = new RegisterRequestDto();
   saving = false;
 
   constructor(
     injector: Injector,
-    private _accountService: AccountServiceProxy,
+    private _identityService: IdentityServiceProxy,
     private _router: Router,
     private authService: AppAuthService
   ) {
@@ -29,14 +28,14 @@ export class RegisterComponent extends AppComponentBase {
 
   save(): void {
     this.saving = true;
-    this._accountService
+    this._identityService
       .register(this.model)
       .pipe(
         finalize(() => {
           this.saving = false;
         })
       )
-      .subscribe((result: RegisterOutput) => {
+      .subscribe((result) => {
         if (!result.canLogin) {
           this.notify.success(this.l('SuccessfullyRegistered'));
           this._router.navigate(['/login']);
@@ -45,8 +44,8 @@ export class RegisterComponent extends AppComponentBase {
 
         // Autheticate
         this.saving = true;
-        this.authService.authenticateModel.userNameOrEmailAddress = this.model.userName;
-        this.authService.authenticateModel.password = this.model.password;
+        this.authService.loginRequestDto.userNameOrEmailAddress = this.model.userName;
+        this.authService.loginRequestDto.password = this.model.password;
         this.authService.authenticate(() => {
           this.saving = false;
         });
