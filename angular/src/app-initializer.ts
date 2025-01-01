@@ -1,14 +1,14 @@
-import { Injectable, Injector } from '@angular/core';
-import { PlatformLocation, registerLocaleData } from '@angular/common';
+import { PlatformLocation } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import * as moment from 'moment-timezone';
-import { filter as _filter, merge as _merge } from 'lodash-es';
+import { Injectable, Injector } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
-import { AppSessionService } from '@shared/session/app-session.service';
-import { environment } from './environments/environment';
-import { SubdomainTenantResolver } from '@shared/multi-tenancy/tenant-resolvers/subdomain-tenant-resolver';
 import { QueryStringTenantResolver } from '@shared/multi-tenancy/tenant-resolvers/query-string-tenant-resolver';
-import { IdentityServiceProxy, TenantStatus, TenantStatusResultDto } from '@shared/service-proxies/service-proxies';
+import { SubdomainTenantResolver } from '@shared/multi-tenancy/tenant-resolvers/subdomain-tenant-resolver';
+import { IdentityServiceProxy, TenantStatus } from '@shared/service-proxies/service-proxies';
+import { AppSessionService } from '@shared/session/app-session.service';
+import { filter as _filter, merge as _merge } from 'lodash-es';
+import * as moment from 'moment-timezone';
+import { environment } from './environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -31,29 +31,10 @@ export class AppInitializer {
             abp.event.trigger('abp.dynamicScriptsInitialized');
             // do not use constructor injection for AppSessionService
             const appSessionService = this._injector.get(AppSessionService);
-            appSessionService.init().then(
-              (result) => {
-                abp.ui.clearBusy();
-                if (this.shouldLoadLocale()) {
-                  const angularLocale = this.convertAbpLocaleToAngularLocale(
-                    abp.localization.currentLanguage.name
-                  );
-                  import(`/node_modules/@angular/common/locales/${angularLocale}.mjs`).then(
-                    (module) => {
-                      registerLocaleData(module.default);
-                      resolve(result);
-                    },
-                    reject
-                  );
-                } else {
-                  resolve(result);
-                }
-              },
-              (err) => {
-                abp.ui.clearBusy();
-                reject(err);
-              }
-            );
+            appSessionService.init()
+              .then((result) => resolve(result))
+              .catch((error) => reject(error))
+              .finally(() => abp.ui.clearBusy());
           });
         });
       });
@@ -78,26 +59,6 @@ export class AppInitializer {
     }
 
     return document.location.origin;
-  }
-
-  private shouldLoadLocale(): boolean {
-    return (
-      abp.localization.currentLanguage.name &&
-      abp.localization.currentLanguage.name !== 'en-US'
-    );
-  }
-
-  private convertAbpLocaleToAngularLocale(locale: string): string {
-    if (!AppConsts.localeMappings) {
-      return locale;
-    }
-
-    const localeMapings = _filter(AppConsts.localeMappings, { from: locale });
-    if (localeMapings && localeMapings.length) {
-      return localeMapings[0]['to'];
-    }
-
-    return locale;
   }
 
   private getCurrentClockProvider(
@@ -165,7 +126,6 @@ export class AppInitializer {
       .subscribe((response) => {
         AppConsts.appBaseUrl = response.appBaseUrl;
         AppConsts.remoteServiceBaseUrl = response.remoteServiceBaseUrl;
-        AppConsts.localeMappings = response.localeMappings;
 
         // Find tenant from subdomain
         var tenancyName = this.resolveTenancyName(response.appBaseUrl);
