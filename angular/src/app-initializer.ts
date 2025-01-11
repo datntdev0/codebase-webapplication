@@ -8,7 +8,7 @@ import { IdentityServiceProxy, TenantStatus } from '@shared/service-proxies/serv
 import { AppSessionService } from '@shared/session/app-session.service';
 import { filter as _filter, merge as _merge } from 'lodash-es';
 import * as moment from 'moment-timezone';
-import { environment } from './environments/environment';
+import { environment } from './_environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -118,10 +118,8 @@ export class AppInitializer {
 
   private getApplicationConfig(appRootUrl: string, callback: () => void) {
     this._httpClient
-      .get<any>(`${appRootUrl}assets/${environment.appConfig}`, {
-        headers: {
-          'Abp.TenantId': `${abp.multiTenancy.getTenantIdCookie()}`,
-        },
+      .get<any>(`${appRootUrl}configs/${environment.appConfig}`, {
+        headers: { 'Abp.TenantId': `${abp.multiTenancy.getTenantIdCookie()}` },
       })
       .subscribe((response) => {
         AppConsts.appBaseUrl = response.appBaseUrl;
