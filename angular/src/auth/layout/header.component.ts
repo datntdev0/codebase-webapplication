@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'account-header',
-  templateUrl: './account-header.component.html',
+  selector: 'header',
+  templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AccountHeaderComponent {}
+export class HeaderComponent {}

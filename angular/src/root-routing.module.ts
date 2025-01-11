@@ -4,13 +4,13 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
     { path: '', redirectTo: '/app/about', pathMatch: 'full' },
     {
-        path: 'account',
-        loadChildren: () => import('account/account.module').then(m => m.AccountModule), // Lazy load account module
+        path: 'auth',
+        loadChildren: () => import('auth/auth.module').then(m => m.AuthModule),
         data: { preload: true }
     },
     {
         path: 'app',
-        loadChildren: () => import('app/app.module').then(m => m.AppModule), // Lazy load account module
+        loadChildren: () => import('app/app.module').then(m => m.AppModule),
         data: { preload: true }
     }
 ];
