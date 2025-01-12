@@ -10,5 +10,6 @@ public class MyCodebaseCoreSharedModule : AbpModule
         
         // Enable this line to create a multi-tenant application.
         Configuration.MultiTenancy.IsEnabled = MyCodebaseConsts.MultiTenancyEnabled;
+        Configuration.MultiTenancy.TenantIdResolveKey = "Abp.TenantId";
     }
 }

@@ -115,7 +115,7 @@ public abstract class MyCodebaseWebTestBase : AbpAspNetCoreIntegratedTestBase<St
             if (tenant != null)
             {
                 AbpSession.TenantId = tenant.Id;
-                Client.DefaultRequestHeaders.Add("Abp-TenantId", tenant.Id.ToString());  //Set TenantId
+                Client.DefaultRequestHeaders.Add("Abp.TenantId", tenant.Id.ToString());  //Set TenantId
             }
         }
 
