@@ -2,6 +2,7 @@ import { NgModule, APP_INITIALIZER, LOCALE_ID,provideExperimentalZonelessChangeD
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -43,6 +44,7 @@ export function getCurrentLanguage(): string {
   ],
   declarations: [RootComponent],
   providers: [
+    provideAnimations(),
     provideExperimentalZonelessChangeDetection(),
     provideClientHydration(),
     { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true },
