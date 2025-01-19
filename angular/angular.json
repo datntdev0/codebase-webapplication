@@ -39,7 +39,7 @@
               "node_modules/sweetalert2/dist/sweetalert2.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/abp.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
-              "src/_scripts/abp-wrapper.js"
+              "src/_scripts/abp.ui.busy.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -136,7 +136,7 @@
               "node_modules/push.js/bin/push.min.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/abp.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
-              "src/_scripts/abp-wrapper.js"
+              "src/_scripts/abp.ui.busy.js"
             ]
           }
         }

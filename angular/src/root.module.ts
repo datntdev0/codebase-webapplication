@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER, LOCALE_ID,provideExperimentalZonelessChangeDetection} from '@angular/core';
+import { NgModule, APP_INITIALIZER, LOCALE_ID, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,6 +12,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AbpHttpInterceptor } from 'abp-ng2-module';
 
 import { SharedModule } from '@shared/shared.module';
+import { ThemeModule } from "@theme/theme.module";
+
 import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import { RootRoutingModule } from './root-routing.module';
 import { AppConsts } from '@shared/AppConsts';
@@ -41,6 +43,7 @@ export function getCurrentLanguage(): string {
     TabsModule.forRoot(),
     ServiceProxyModule,
     RootRoutingModule,
+    ThemeModule,
   ],
   declarations: [RootComponent],
   providers: [
@@ -62,4 +65,4 @@ export function getCurrentLanguage(): string {
   ],
   bootstrap: [RootComponent],
 })
-export class RootModule {}
+export class RootModule { }

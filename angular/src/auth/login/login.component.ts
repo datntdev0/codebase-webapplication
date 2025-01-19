@@ -34,5 +34,6 @@ export class LoginComponent extends AppComponentBase {
   login(): void {
     this.submitting = true;
     this.authService.authenticate(() => (this.submitting = false));
+    // abp.message.info("Disme");
   }
 }
