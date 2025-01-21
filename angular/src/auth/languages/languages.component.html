@@ -1,0 +1,11 @@
+﻿<div class="text-center">
+  @for (language of languages; track language) {
+    @if (language.name != currentLanguage.name) {
+    <a href="javascript:void(0);" (click)="changeLanguage(language.name)">
+      <span title="{{language.displayName}}">
+        {{language.displayName}}
+      </span>
+    </a>
+    }
+  }
+</div>

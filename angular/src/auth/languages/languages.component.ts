@@ -12,8 +12,7 @@ import { filter as _filter } from 'lodash-es';
   templateUrl: './languages.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LanguagesComponent extends AppComponentBase
-  implements OnInit {
+export class LanguagesComponent extends AppComponentBase implements OnInit {
   languages: abp.localization.ILanguageInfo[];
   currentLanguage: abp.localization.ILanguageInfo;
 

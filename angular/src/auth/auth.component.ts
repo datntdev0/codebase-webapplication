@@ -1,9 +1,8 @@
 import {
   Component,
-  OnInit,
-  ViewEncapsulation,
   Injector,
-  Renderer2
+  OnInit,
+  ViewEncapsulation
 } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 
@@ -12,15 +11,19 @@ import { AppComponentBase } from '@shared/app-component-base';
   encapsulation: ViewEncapsulation.None
 })
 export class AuthComponent extends AppComponentBase implements OnInit {
-  constructor(injector: Injector, private renderer: Renderer2) {
+  protected isMultiTenancy: boolean;
+  protected currentYear: number;
+  protected versionNumber: string;
+  protected releaseDate: string;
+
+  constructor(injector: Injector) {
     super(injector);
   }
 
-  showTenantChange(): boolean {
-    return abp.multiTenancy.isEnabled;
-  }
-
   ngOnInit(): void {
-    this.renderer.addClass(document.body, 'login-page');
+    this.currentYear = new Date().getFullYear();
+    this.isMultiTenancy = abp.multiTenancy.isEnabled;
+    this.versionNumber = this.appSession.application.version;
+    this.releaseDate = this.appSession.application.releaseDate.format("YYYYDDMM");
   }
 }
