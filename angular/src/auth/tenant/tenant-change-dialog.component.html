@@ -1,37 +1,24 @@
-﻿<form
-  class="form-horizontal"
-  autocomplete="off"
-  #changeTenantForm="ngForm"
-  (ngSubmit)="save()"
->
-  <abp-modal-header
-    [title]="'ChangeTenant' | localize"
-    (onCloseClick)="bsModalRef.hide()"
-  ></abp-modal-header>
+﻿<form class="form-horizontal" autocomplete="off" #changeTenantForm="ngForm" (ngSubmit)="save()">
+  <div class="modal-header border-bottom-0">
+    <h5 class="modal-title" id="exampleModalLabel">{{ "ChangeTenant" | localize }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="_modalRef.close()"></button>
+  </div>
   <div class="modal-body">
-    <div class="form-group row">
-      <label class="col-md-3 col-form-label" for="tenancyName">
+    <div class="input-group mb-1">
+      <span class="input-group-text">
         {{ "TenancyName" | localize }}
-      </label>
-      <div class="col-md-9">
-        <input
-          type="text"
-          class="form-control"
-          id="tenancyName"
-          name="tenancyName"
-          [(ngModel)]="tenancyName"
-          maxlength="64"
-        />
-      </div>
+      </span>
+      <input type="text" class="form-control" id="tenancyName" name="tenancyName" [(ngModel)]="tenancyName"
+        maxlength="64" />
     </div>
     <span>
       <i class="fa fa-info-circle"></i>
       {{ "LeaveEmptyToSwitchToHost" | localize }}
     </span>
   </div>
-  <abp-modal-footer
-    [cancelDisabled]="saving"
-    [saveDisabled]="!changeTenantForm.form.valid || saving"
-    (onCancelClick)="bsModalRef.hide()"
-  ></abp-modal-footer>
+  <div class="modal-footer border-top-0">
+    <button type="submit" class="btn btn-primary px-3" mdbRipple [disabled]="!changeTenantForm.form.valid || saving">
+      {{"Change" | localize}}
+    </button>
+  </div>
 </form>

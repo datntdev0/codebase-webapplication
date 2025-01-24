@@ -10,9 +10,11 @@
       @if (!tenancyName) {
         <span>{{ "NotSelected" | localize }}</span>
       }
-      (<a href="javascript:;" (click)="showChangeModal()">
-      {{ "Change" | localize }} </a
-      >)
+      (
+        <a href="javascript:;" (click)="showChangeModal()">
+          {{ "Change" | localize }}
+        </a>
+      )
     </span>
   </div>
 }

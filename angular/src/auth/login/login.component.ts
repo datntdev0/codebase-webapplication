@@ -9,11 +9,11 @@ import { AppAuthService } from '@shared/auth/app-auth.service';
   animations: [accountModuleAnimation()]
 })
 export class LoginComponent extends AppComponentBase {
-  submitting = false;
+  protected submitting = false;
 
   constructor(
     injector: Injector,
-    public authService: AppAuthService,
+    protected _authService: AppAuthService,
     private _sessionService: AbpSessionService
   ) {
     super(injector);
@@ -24,16 +24,11 @@ export class LoginComponent extends AppComponentBase {
   }
 
   get isSelfRegistrationAllowed(): boolean {
-    if (!this._sessionService.tenantId) {
-      return false;
-    }
-
-    return true;
+    return !!this._sessionService.tenantId;
   }
 
   login(): void {
     this.submitting = true;
-    this.authService.authenticate(() => (this.submitting = false));
-    // abp.message.info("Disme");
+    this._authService.authenticate(() => (this.submitting = false));
   }
 }

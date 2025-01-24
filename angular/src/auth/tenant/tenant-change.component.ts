@@ -1,17 +1,17 @@
 ﻿import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { TenantChangeDialogComponent } from './tenant-change-dialog.component';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 
 @Component({
   selector: 'tenant-change',
   templateUrl: './tenant-change.component.html'
 })
 export class TenantChangeComponent extends AppComponentBase implements OnInit {
-  tenancyName = '';
-  name = '';
+  protected name = '';
+  protected tenancyName = '';
 
-  constructor(injector: Injector, private _modalService: BsModalService) {
+  constructor(injector: Injector, private _modalService: MdbModalService) {
     super(injector);
   }
 
@@ -21,15 +21,12 @@ export class TenantChangeComponent extends AppComponentBase implements OnInit {
 
   ngOnInit() {
     if (this.appSession.tenant) {
-      this.tenancyName = this.appSession.tenant.tenancyName;
       this.name = this.appSession.tenant.name;
+      this.tenancyName = this.appSession.tenant.tenancyName;
     }
   }
 
   showChangeModal(): void {
-    const modal = this._modalService.show(TenantChangeDialogComponent);
-    if (this.appSession.tenant) {
-      modal.content.tenancyName = this.appSession.tenant.tenancyName;
-    }
+    this._modalService.open(TenantChangeDialogComponent);
   }
 }

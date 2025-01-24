@@ -1,82 +1,40 @@
 ﻿<div [@routerTransition]>
   <h4 class="text-center mb-3">{{ "LogIn" | localize }}</h4>
   <form novalidate autocomplete="off" #loginForm="ngForm" (ngSubmit)="login()">
-    <div class="form-group">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          name="userNameOrEmailAddress"
-          [(ngModel)]="authService.loginRequestDto.userNameOrEmailAddress"
-          [placeholder]="'UserNameOrEmail' | localize"
-          required
-          maxlength="256"
-          #userNameOrEmailAddressModel="ngModel"
-          #userNameOrEmailAddressEl
-          />
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
-          </div>
-        </div>
-        <abp-validation-summary
-          [control]="userNameOrEmailAddressModel"
-          [controlEl]="userNameOrEmailAddressEl"
-        ></abp-validation-summary>
+    <div class="input-group input-group-lg mb-2">
+      <input type="text" class="form-control" name="userNameOrEmailAddress"
+        [(ngModel)]="_authService.loginRequestDto.userNameOrEmailAddress" [placeholder]="'UserNameOrEmail' | localize"
+        required maxlength="256" #userNameOrEmailAddressModel="ngModel" #userNameOrEmailAddressEl />
+      <div class="input-group-text">
+        <span class="fas fa-user"></span>
       </div>
-      <div class="form-group">
-        <div class="input-group">
-          <input
-            type="password"
-            class="form-control"
-            name="password"
-            [(ngModel)]="authService.loginRequestDto.password"
-            [placeholder]="'Password' | localize"
-            required
-            maxlength="32"
-            #passwordModel="ngModel"
-            #passwordEl
-            />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
-          <abp-validation-summary
-            [control]="passwordModel"
-            [controlEl]="passwordEl"
-          ></abp-validation-summary>
-        </div>
-        <div class="form-group row">
-          <div class="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="rememberMe"
-              name="rememberMe"
-              [(ngModel)]="authService.rememberMe"
-              />
-            <label for="rememberMe" class="custom-control-label">
-              {{ "RememberMe" | localize }}
-            </label>
-          </div>
-        </div>
-        <div class="form-group">
-          <button
-            type="submit"
-            class="btn btn-primary btn-block"
-            >
-            {{ "LogIn" | localize }}
-          </button>
-        </div>
-        </form>
-        @if (isSelfRegistrationAllowed) {
-          <p class="mb-1">
-            <a [routerLink]="['../register']">
-              <i class="fa fa-plus-circle"></i> {{ "Register" | localize }}
-            </a>
-          </p>
-        }
+    </div>
+    <abp-validation-summary [control]="userNameOrEmailAddressModel"
+      [controlEl]="userNameOrEmailAddressEl"></abp-validation-summary>
+    <div class="input-group input-group-lg mb-2">
+      <input type="password" class="form-control" name="password" [(ngModel)]="_authService.loginRequestDto.password"
+        [placeholder]="'Password' | localize" required maxlength="32" #passwordModel="ngModel" #passwordEl />
+      <div class="input-group-text">
+        <span class="fas fa-lock"></span>
       </div>
+    </div>
+    <abp-validation-summary [control]="passwordModel" [controlEl]="passwordEl"></abp-validation-summary>
+    <div class="d-flex justify-content-between">
+      <div class="form-check mb-4">
+        <input mdbCheckbox type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe"
+          [(ngModel)]="_authService.rememberMe" />
+        <label for="rememberMe" class="custom-control-label">
+          {{ "RememberMe" | localize }}
+        </label>
+      </div>
+      @if (isSelfRegistrationAllowed) {
+      <a [routerLink]="['../register']">
+        <i class="fa fa-plus-circle"></i> {{ "Register" | localize }}
+      </a>
+      }
+    </div>
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.form.valid || submitting">
+      {{ "LogIn" | localize }}
+    </button>
+  </form>
+</div>

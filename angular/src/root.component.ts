@@ -7,7 +7,7 @@ import { MdbModalService } from 'mdb-angular-ui-kit/modal';
   template: `<router-outlet></router-outlet>`
 })
 export class RootComponent implements OnInit {
-  constructor(private modalService: MdbModalService) { }
+  constructor(private _modalService: MdbModalService) { }
 
   ngOnInit(): void {
     this.initAbpMessage();
@@ -16,7 +16,7 @@ export class RootComponent implements OnInit {
   private initAbpMessage(): void {
     ['info', 'success', 'warn', 'error'].forEach(type => {
       abp.message[type] = (message: string, title?: string, options?: any) =>
-        this.modalService.open(AbpMessageComponent,
+        this._modalService.open(AbpMessageComponent,
           { data: { message, title, type, options } });
     });
   }

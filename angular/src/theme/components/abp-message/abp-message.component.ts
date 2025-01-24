@@ -10,5 +10,5 @@ export class AbpMessageComponent {
   protected title: string;
   protected type: 'info' | 'success' | 'warn' | 'error' | 'confirm';
 
-  constructor(public modalRef: MdbModalRef<AbpMessageComponent>) { }
+  constructor(protected _modalRef: MdbModalRef<AbpMessageComponent>) { }
 }

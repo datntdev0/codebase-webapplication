@@ -3,6 +3,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import { AppTenantAvailabilityState } from '@shared/AppEnums';
 import { IdentityServiceProxy } from '@shared/service-proxies/service-proxies';
+import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 
 @Component({
   templateUrl: './tenant-change-dialog.component.html'
@@ -14,7 +15,7 @@ export class TenantChangeDialogComponent extends AppComponentBase {
   constructor(
     injector: Injector,
     private _identityService: IdentityServiceProxy,
-    public bsModalRef: BsModalRef
+    protected _modalRef: MdbModalRef<TenantChangeDialogComponent>
   ) {
     super(injector);
   }
@@ -22,7 +23,6 @@ export class TenantChangeDialogComponent extends AppComponentBase {
   save(): void {
     if (!this.tenancyName) {
       abp.multiTenancy.setTenantIdCookie(undefined);
-      this.bsModalRef.hide();
       location.reload();
       return;
     }
