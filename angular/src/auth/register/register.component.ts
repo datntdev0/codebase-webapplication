@@ -19,9 +19,9 @@ export class RegisterComponent extends AppComponentBase {
 
   constructor(
     injector: Injector,
-    private _identityService: IdentityServiceProxy,
     private _router: Router,
-    private authService: AppAuthService
+    private _authService: AppAuthService,
+    private _identityService: IdentityServiceProxy
   ) {
     super(injector);
   }
@@ -30,11 +30,7 @@ export class RegisterComponent extends AppComponentBase {
     this.saving = true;
     this._identityService
       .register(this.model)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        })
-      )
+      .pipe(finalize(() => this.saving = false))
       .subscribe((result) => {
         if (!result.canLogin) {
           this.notify.success(this.l('SuccessfullyRegistered'));
@@ -44,11 +40,9 @@ export class RegisterComponent extends AppComponentBase {
 
         // Autheticate
         this.saving = true;
-        this.authService.loginRequestDto.userNameOrEmailAddress = this.model.userName;
-        this.authService.loginRequestDto.password = this.model.password;
-        this.authService.authenticate(() => {
-          this.saving = false;
-        });
+        this._authService.loginRequestDto.userNameOrEmailAddress = this.model.userName;
+        this._authService.loginRequestDto.password = this.model.password;
+        this._authService.authenticate(() => this.saving = false);
       });
   }
 }

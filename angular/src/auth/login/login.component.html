@@ -1,7 +1,7 @@
 ﻿<div [@routerTransition]>
   <h4 class="text-center mb-3">{{ "LogIn" | localize }}</h4>
   <form novalidate autocomplete="off" #loginForm="ngForm" (ngSubmit)="login()">
-    <div class="input-group input-group-lg mb-2">
+    <div class="input-group input-group-lg mt-2">
       <input type="text" class="form-control" name="userNameOrEmailAddress"
         [(ngModel)]="_authService.loginRequestDto.userNameOrEmailAddress" [placeholder]="'UserNameOrEmail' | localize"
         required maxlength="256" #userNameOrEmailAddressModel="ngModel" #userNameOrEmailAddressEl />
@@ -11,7 +11,7 @@
     </div>
     <abp-validation-summary [control]="userNameOrEmailAddressModel"
       [controlEl]="userNameOrEmailAddressEl"></abp-validation-summary>
-    <div class="input-group input-group-lg mb-2">
+    <div class="input-group input-group-lg mt-2">
       <input type="password" class="form-control" name="password" [(ngModel)]="_authService.loginRequestDto.password"
         [placeholder]="'Password' | localize" required maxlength="32" #passwordModel="ngModel" #passwordEl />
       <div class="input-group-text">
@@ -19,8 +19,8 @@
       </div>
     </div>
     <abp-validation-summary [control]="passwordModel" [controlEl]="passwordEl"></abp-validation-summary>
-    <div class="d-flex justify-content-between">
-      <div class="form-check mb-4">
+    <div class="d-flex justify-content-between mt-2">
+      <div class="form-check">
         <input mdbCheckbox type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe"
           [(ngModel)]="_authService.rememberMe" />
         <label for="rememberMe" class="custom-control-label">
@@ -33,7 +33,7 @@
       </a>
       }
     </div>
-    <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.form.valid || submitting">
+    <button type="submit" class="btn btn-primary btn-block mt-4" [disabled]="!loginForm.form.valid || submitting">
       {{ "LogIn" | localize }}
     </button>
   </form>
