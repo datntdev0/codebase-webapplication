@@ -32,21 +32,16 @@ export class AppSessionService {
         return this.user ? this.user.id : null;
     }
 
+    get userName(): string {
+        return this.user ? this.user.userName : null;
+    }
+
     get tenant(): TenantLoginInfoDto {
         return this._tenant;
     }
 
     get tenantId(): number {
         return this.tenant ? this.tenant.id : null;
-    }
-
-    getShownLoginName(): string {
-        const userName = this._user.userName;
-        if (!this._abpMultiTenancyService.isEnabled) {
-            return userName;
-        }
-
-        return (this._tenant ? this._tenant.tenancyName : '.') + '\\' + userName;
     }
 
     init(): Promise<boolean> {

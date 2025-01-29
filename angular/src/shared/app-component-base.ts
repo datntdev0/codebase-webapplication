@@ -15,6 +15,8 @@ import { PrimengTableHelper } from 'shared/helpers/PrimengTableHelper';
 
 export abstract class AppComponentBase {
 
+    protected appName = AppConsts.appName;
+
     localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
 
     localization: LocalizationService;

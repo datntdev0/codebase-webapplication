@@ -1,9 +1,4 @@
-<a class="brand-link" [routerLink]="['home']">
-  <img
-    src="images/logo.png"
-    alt="Logo"
-    class="brand-image img-circle elevation-3"
-    style="opacity: 0.8;"
-  />
-  <span class="brand-text font-weight-light">MyCodebase</span>
+<a class="d-flex align-items-center" [routerLink]="['home']">
+  <img src="images/logo.png" class="w-50px" />
+  <span class="ms-2 mt-1">{{displayName}}</span>
 </a>

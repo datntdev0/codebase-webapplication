@@ -1,0 +1,15 @@
+<div mdbDropdown class="dropdown dropstart">
+  <a href="javascript:;" mdbDropdownToggle>
+    <i class="d-inline-block {{ currentLanguage.icon }}"></i>
+  </a>
+  <div mdbDropdownMenu class="dropdown-menu">
+    @for (language of languages; track language) {
+      @if (language.name != currentLanguage.name) {
+      <a class="dropdown-item" href="javascript:;" (click)="changeLanguage(language.name)">
+        <i class="d-inline-block {{ language.icon }} mr-1"></i>
+        {{ language.displayName }}
+      </a>
+      }
+    }
+  </div>
+</div>

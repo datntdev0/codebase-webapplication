@@ -43,7 +43,7 @@ export function getCurrentLanguage(): string {
     TabsModule.forRoot(),
     ServiceProxyModule,
     RootRoutingModule,
-    ThemeModule,
+    ThemeModule.MdbModules,
   ],
   declarations: [RootComponent],
   providers: [

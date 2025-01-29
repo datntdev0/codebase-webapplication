@@ -1,12 +1,17 @@
-<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-  <div class="image">
-    <img
-      src="images/user.png"
-      class="img-circle elevation-2"
-      alt="User Image"
-    />
+<div class="d-flex align-items-center justify-content-between my-3">
+  <div mdbDropdown class="dropdown">
+    <div class="d-flex align-items-center" role="button" mdbDropdownToggle>
+      <i class="fas fa-user-circle fa-2x"></i>
+      <span class="ms-2 mt-1">{{appSession.userName}}</span>
+    </div>
+    <div mdbDropdownMenu class="dropdown-menu">
+      <a class="dropdown-item" [routerLink]="['update-password']">
+        <i class="fas fa-user-edit"></i> {{ "UpdatePassword" | localize }}
+      </a>
+      <a class="dropdown-item" href="javascript:;" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> {{ "Logout" | localize }}
+      </a>
+    </div>
   </div>
-  <div class="info">
-    <a class="d-block" href="javascript:;">{{ shownLoginName }}</a>
-  </div>
+  <sidebar-language-menu class="ms-2 mt-1"></sidebar-language-menu>
 </div>

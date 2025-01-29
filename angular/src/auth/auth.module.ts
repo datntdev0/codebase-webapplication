@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
 // tenants
+import { ThemeModule } from '@theme/theme.module';
 import { TenantChangeDialogComponent } from './tenant/tenant-change-dialog.component';
 import { TenantChangeComponent } from './tenant/tenant-change.component';
 
@@ -20,6 +21,7 @@ import { TenantChangeComponent } from './tenant/tenant-change.component';
     CommonModule,
     FormsModule,
     SharedModule,
+    ThemeModule,
     ServiceProxyModule,
     AuthRoutingModule,
     ModalModule.forChild()

@@ -9,11 +9,11 @@ import { ChangeLanguageDto, SessionServiceProxy } from '@shared/service-proxies/
 import { filter as _filter } from 'lodash-es';
 
 @Component({
-  selector: 'header-language-menu',
-  templateUrl: './header-language-menu.component.html',
+  selector: 'sidebar-language-menu',
+  templateUrl: './sidebar-language-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderLanguageMenuComponent extends AppComponentBase
+export class SidebarLanguageMenuComponent extends AppComponentBase
   implements OnInit {
   languages: abp.localization.ILanguageInfo[];
   currentLanguage: abp.localization.ILanguageInfo;
@@ -35,6 +35,7 @@ export class HeaderLanguageMenuComponent extends AppComponentBase
     input.languageName = languageName;
 
     this._sessionService.changeLanguage(input).subscribe(() => {
+      
       abp.utils.setCookieValue(
         'Abp.Localization.CultureName',
         languageName,

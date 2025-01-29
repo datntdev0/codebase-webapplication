@@ -22,7 +22,7 @@ import { AboutComponent } from "../app/about/about.component";
 // layout
 import { HeaderComponent } from "./layout/header.component";
 import { HeaderLeftNavbarComponent } from "./layout/header-left-navbar.component";
-import { HeaderLanguageMenuComponent } from "./layout/header-language-menu.component";
+import { SidebarLanguageMenuComponent } from "./layout/sidebar-language-menu.component";
 import { HeaderUserMenuComponent } from "./layout/header-user-menu.component";
 import { FooterComponent } from "./layout/footer.component";
 import { SidebarComponent } from "./layout/sidebar.component";
@@ -41,7 +41,7 @@ describe("AppComponent", () => {
         // layout
         HeaderComponent,
         HeaderLeftNavbarComponent,
-        HeaderLanguageMenuComponent,
+        SidebarLanguageMenuComponent,
         HeaderUserMenuComponent,
         FooterComponent,
         SidebarComponent,

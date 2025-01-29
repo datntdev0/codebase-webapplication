@@ -1,0 +1,16 @@
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+}
+
+.navbar .navbar-toggler {
+  top: .25rem;
+  right: 1rem;
+}
+
+.nav-pills .nav-link {
+  --mdb-nav-pills-link-font-size: 14px;
+  --mdb-nav-pills-link-padding-x: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+}

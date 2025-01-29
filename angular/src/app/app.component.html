@@ -1,9 +1,29 @@
-<div class="wrapper">
-  <app-header></app-header>
-  <sidebar></sidebar>
-  <div class="content-wrapper">
-    <router-outlet></router-outlet>
+<!-- Top NavBar -->
+<header class="navbar navbar-expand-md navbar-dark bg-dark p-0 sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">{{appName}}</a>
+    <button class="navbar-toggler" type="button" (click)="toggler.toggle()">
+      <i class="fas fa-bars"></i>
+    </button>
   </div>
-  <app-footer></app-footer>
-  <div id="sidebar-overlay" (click)="toggleSidebar()"></div>
+</header>
+
+<!-- Aside Bar -->
+<div class="d-flex">
+  <nav id="sidebarMenu" class="bg-light sidebar" mdbCollapse #toggler="mdbCollapse">
+    <div class="position-sticky px-2 sidebar-sticky">
+      <sidebar-logo></sidebar-logo>
+      <hr class="hr my-0" />
+      <sidebar-user-panel></sidebar-user-panel>
+      <hr class="hr my-0" />
+      <sidebar-menu></sidebar-menu>
+    </div>
+  </nav>
+
+  <main class="container-fluid flex-grow-1">
+    <!-- Main Container -->
+    <router-outlet></router-outlet>
+    <!-- Footer -->
+    <footer><abp-copyright></abp-copyright></footer>
+  </main>
 </div>

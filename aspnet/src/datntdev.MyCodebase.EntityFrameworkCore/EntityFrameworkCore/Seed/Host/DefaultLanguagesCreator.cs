@@ -17,8 +17,8 @@ public class DefaultLanguagesCreator
         var tenantId = MyCodebaseConsts.MultiTenancyEnabled ? null : (int?)MultiTenancyConsts.DefaultTenantId;
         return
         [
-            new(tenantId, "en", "English", "famfamfam-flags us"),
-            new(tenantId, "vi", "Tiếng Việt", "famfamfam-flags vn"),
+            new(tenantId, "en", "English", "flag flag-united-states"),
+            new(tenantId, "vi", "Tiếng Việt", "flag flag-vietnam"),
         ];
     }
 
