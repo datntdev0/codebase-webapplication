@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppRouteGuard } from '@shared/auth/auth-route-guard';
 import { AppComponent } from './app.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
     imports: [
@@ -11,13 +12,8 @@ import { AppComponent } from './app.component';
                 component: AppComponent,
                 children: [
                     {
-                        path: 'home',
-                        loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
-                        canActivate: [AppRouteGuard]
-                    },
-                    {
                         path: 'about',
-                        loadChildren: () => import('./about/about.module').then((m) => m.AboutModule),
+                        component: AboutComponent,
                         canActivate: [AppRouteGuard]
                     },
                     {

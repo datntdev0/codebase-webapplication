@@ -17,6 +17,8 @@ import { SidebarLanguageMenuComponent } from './layout/sidebar-language-menu.com
 import { SidebarLogoComponent } from './layout/sidebar-logo.component';
 import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 import { SidebarUserPanelComponent } from './layout/sidebar-user-panel.component';
+// pages
+import { AboutComponent } from "./about/about.component"
 
 @NgModule({
     declarations: [
@@ -26,6 +28,8 @@ import { SidebarUserPanelComponent } from './layout/sidebar-user-panel.component
         SidebarUserPanelComponent,
         SidebarLanguageMenuComponent,
         SidebarMenuComponent,
+        // pages
+        AboutComponent,
     ],
     imports: [
         AppRoutingModule,

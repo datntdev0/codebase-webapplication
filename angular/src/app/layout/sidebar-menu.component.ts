@@ -34,13 +34,6 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
   getMenuItems(): MenuItem[] {
     return [
       new MenuItem(this.l('About'), '/app/about', 'fas fa-info-circle'),
-      new MenuItem(this.l('HomePage'), '/app/home', 'fas fa-home'),
-      new MenuItem(
-        this.l('Roles'),
-        '/app/roles',
-        'fas fa-theater-masks',
-        'Pages.Roles'
-      ),
       new MenuItem(
         this.l('Tenants'),
         '/app/tenants',
@@ -52,6 +45,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         '/app/users',
         'fas fa-users',
         'Pages.Users'
+      ),
+      new MenuItem(
+        this.l('Roles'),
+        '/app/roles',
+        'fas fa-theater-masks',
+        'Pages.Roles'
       ),
       new MenuItem(this.l('MultiLevelMenu'), '', 'fas fa-circle', '', [
         new MenuItem('ASP.NET Boilerplate', '', 'fas fa-dot-circle', '', [
