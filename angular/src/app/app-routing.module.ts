@@ -17,6 +17,12 @@ import { AboutComponent } from './about/about.component';
                         canActivate: [AppRouteGuard]
                     },
                     {
+                        path: 'tenants',
+                        loadChildren: () => import('./tenants/tenants.module').then((m) => m.TenantsModule),
+                        data: { permission: 'Pages.Tenants' },
+                        canActivate: [AppRouteGuard]
+                    },
+                    {
                         path: 'users',
                         loadChildren: () => import('./users/users.module').then((m) => m.UsersModule),
                         data: { permission: 'Pages.Users' },
@@ -26,12 +32,6 @@ import { AboutComponent } from './about/about.component';
                         path: 'roles',
                         loadChildren: () => import('./roles/roles.module').then((m) => m.RolesModule),
                         data: { permission: 'Pages.Roles' },
-                        canActivate: [AppRouteGuard]
-                    },
-                    {
-                        path: 'tenants',
-                        loadChildren: () => import('./tenants/tenants.module').then((m) => m.TenantsModule),
-                        data: { permission: 'Pages.Tenants' },
                         canActivate: [AppRouteGuard]
                     },
                     {

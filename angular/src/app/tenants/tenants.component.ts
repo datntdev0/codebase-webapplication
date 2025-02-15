@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   Injector,
+  OnInit,
   ViewChild,
 } from "@angular/core";
 import { finalize } from "rxjs/operators";
@@ -19,18 +20,21 @@ import { Table } from "primeng/table";
 import { LazyLoadEvent } from "primeng/api";
 import { ActivatedRoute } from "@angular/router";
 import { Paginator } from "primeng/paginator";
+import { Observable } from "@node_modules/rxjs/dist/types";
 
 @Component({
   templateUrl: "./tenants.component.html",
   animations: [appModuleAnimation()],
 })
-export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
+export class TenantsComponent extends PagedListingComponentBase<TenantDto> implements OnInit {
   tenants: TenantDto[] = [];
   keyword = "";
   isActive: boolean | null;
   advancedFiltersVisible = false;
   @ViewChild("dataTable", { static: true }) dataTable: Table;
   @ViewChild("paginator", { static: true }) paginator: Paginator;
+
+  protected dataSource: Observable<TenantDtoPagedResultDto>;
 
   constructor(
     injector: Injector,
@@ -41,6 +45,14 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   ) {
     super(injector, cd);
     this.keyword = this._activatedRoute.snapshot.queryParams["keyword"] || "";
+  }
+
+  ngOnInit(): void {
+    this.getData();
+  }
+
+  getData(): void {
+    this.dataSource = this._tenantService.getAll();
   }
 
   list(event?: LazyLoadEvent): void {
@@ -135,5 +147,6 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   clearFilters(): void {
     this.keyword = "";
     this.isActive = undefined;
+    this.list();
   }
 }
